@@ -23,6 +23,9 @@
 //   ...
 //   L.log("some message here...");
 //
+// NOTE:
+// Logger instances require that the body-tag be
+// already loaded by the browser.
 
 
 

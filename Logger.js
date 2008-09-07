@@ -112,18 +112,21 @@ function Logger(T) {
   var self=this;
 
 
+  var ErrorMessages = {
+    'E1': "Body-tag not loaded yet - can't set up Logger!"
+  };
+  
 
 
-  // FIXME: Getting the html body element can fail
-  // when outside of the 'onload' event.  
-  // Be careful about this.  We could put 
-  // a timeout in or something?
+  // Throw error and alert user if body-tag not loaded
+  // yet.
   var B;
-  try {
-    B=document.getElementsByTagName("BODY")[0];
-  } catch (e) {
-    alert(e.message);
+  B=document.getElementsByTagName("BODY")[0];
+  if (!B) {
+    alert("E1: "+ErrorMessages['E1']);
+    throw new Error("E1: "+ErrorMessages['E1']);
   }
+
 
   var n=0;
   while ( document.getElementById("Logger"+n) != null ) {

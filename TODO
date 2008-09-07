@@ -1,0 +1,32 @@
+date: Sun Sep  7 23:17:46 EST 2008
+subject: TODO list - partly prioritized
+from: Daniel Bush
+
+1. Get Logger working in IE where it is needed most.
+This should become version 0.1.
+
+2. Setup logger to work within a foreign project namespace.
+Suppose we have namespace project1 for a project:
+eg
+   project1.section1.someObject1
+   project1.someObject2
+would represent some of the items living in this project.
+Now suppose we want to use Logger in this project.
+Rather than have Logger live as a global object 'Logger',
+we'd prefer to have it subsumed into the project.
+So we'd have something like:
+   project1.external.logger.Logger
+and:
+   var myLogger = new project1.external.logger.Logger('log for something');
+
+3. Tab interface.
+We can instantiate multiple loggers.  However, in its current
+form, we'd end up with multiple logger divs cluttering up the
+window space.
+Instead we should have a central logger frame with tabs on it.
+Clicking on a tag will display the contents of that log.
+
+4. Resize or 100% width expansion
+It would be handy to be able to view the log using most of the 
+screen on occasions.
+

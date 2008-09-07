@@ -30,88 +30,95 @@
 
 
 
-// Our Logger function has to be self-contained.
-// So it is going to have its own drag drop code.
-// This is a version of DragDropServer but it is
-// not intended for general use.  We include it 
-// here as part of the internals of Logger.
-// Ok, it's not quite internal... :)
-
-function LogDragDropServer() { 
-
-  var self=this;
-  var B = document.getElementsByTagName("BODY")[0];
-  var mouseX,objX;
-  var mouseY,objY;
-
-
-
-
-
-  var obj=null;
-  this.dragOn = function(e) {
-    //if (obj) self.dragOff(e);
-    if ( e.currentTarget==null ) {
-      throw new Error("DragDropServer:Invalid event has been supplied to dragOn method.");
-    }
-    var F = e.currentTarget.findObj; 
-    obj=( F ? F(e) : e.currentTarget );
-    if (obj==null ) {
-      throw new Error("DragDropServer:findObj failed to find object!");
-    }
-    mouseX=parseInt(e.clientX);
-    mouseY=parseInt(e.clientY);
-    objX = parseInt(obj.style.left+0);
-    objY = parseInt(obj.style.top+0);
-    document.addEventListener("mousemove",self.drag,false);
-  }
-  this.dragOff = function(e) {
-    document.removeEventListener("mousemove",self.drag,false);
-    obj=null;
-  }
-  this.drag = function(e) {
-    obj.style.left = objX+e.clientX-mouseX+'px';
-    obj.style.top = objY+e.clientY-mouseY+'px';
-  }
-  this.register = function(O,F) {
-    // O = object to be dragged.
-    //
-    // F = function for finding the object to drag.
-    // Sometimes, we don't want e.currentTarget, but
-    // perhaps something relative to it like a parentNode.
-    //
-    // So, if we are given F, we will 'hang' it
-    // on O, which is a type=1 xhtml element.
-    // The dragOn function will always check for
-    // this function (currently called 'findObj');
-    // If not there, then it defaults to e.currentTarget.
-    //
-    if ( ! O.nodeType || O.nodeType!=1 ) {
-      throw new Error("DragDropServer.register:Invalid element supplied.");
-    }
-    if ( F ) {
-      if ( typeof(F)== "function" ) {
-        O.findObj=F;
-      } else { 
-        throw new Error("DragDropServer.register:Invalid findObj function supplied.");
-      }
-    } 
-
-    // Note! We have to set this
-    // up after we have defined the
-    // functions (methods): self.dragOn etc. 
-    O.addEventListener("mousedown",self.dragOn,true);
-    O.addEventListener("mouseup",self.dragOff,true);
-  }
-  document.addEventListener("click",self.dragOff,false);
-
-}
 
 var logger_zindex=0;
 function Logger(T) {
+
+  // Our Logger function has to be self-contained.
+  // So it is going to have its own drag drop code.
+  // This is a version of DragDropServer but it is
+  // not intended for general use.  We include it 
+  // here as part of the internals of Logger.
+  // Ok, it's not quite internal... :)
+  
+  function LogDragDropServer() { 
+  
+    var self=this;
+    var B = document.getElementsByTagName("BODY")[0];
+    var mouseX,objX;
+    var mouseY,objY;
+  
+  
+  
+  
+  
+    var obj=null;
+    this.dragOn = function(e) {
+      //if (obj) self.dragOff(e);
+      if ( e.currentTarget==null ) {
+        throw new Error("DragDropServer:Invalid event has been supplied to dragOn method.");
+      }
+      var F = e.currentTarget.findObj; 
+      obj=( F ? F(e) : e.currentTarget );
+      if (obj==null ) {
+        throw new Error("DragDropServer:findObj failed to find object!");
+      }
+      mouseX=parseInt(e.clientX);
+      mouseY=parseInt(e.clientY);
+      objX = parseInt(obj.style.left+0);
+      objY = parseInt(obj.style.top+0);
+      //document.addEventListener("mousemove",self.drag,false);
+      addEvent(document,"mousemove",self.drag);
+    }
+    this.dragOff = function(e) {
+      //document.removeEventListener("mousemove",self.drag,false);
+      removeEvent(document,"mousemove",self.drag);
+      //document.removeEventListener("mousemove",self.drag,false);
+      removeEvent(document,"mousemove",self.drag);
+      obj=null;
+    }
+    this.drag = function(e) {
+      obj.style.left = objX+e.clientX-mouseX+'px';
+      obj.style.top = objY+e.clientY-mouseY+'px';
+    }
+    this.register = function(O,F) {
+      // O = object to be dragged.
+      //
+      // F = function for finding the object to drag.
+      // Sometimes, we don't want e.currentTarget, but
+      // perhaps something relative to it like a parentNode.
+      //
+      // So, if we are given F, we will 'hang' it
+      // on O, which is a type=1 xhtml element.
+      // The dragOn function will always check for
+      // this function (currently called 'findObj');
+      // If not there, then it defaults to e.currentTarget.
+      //
+      if ( ! O.nodeType || O.nodeType!=1 ) {
+        throw new Error("DragDropServer.register:Invalid element supplied.");
+      }
+      if ( F ) {
+        if ( typeof(F)== "function" ) {
+          O.findObj=F;
+        } else { 
+          throw new Error("DragDropServer.register:Invalid findObj function supplied.");
+        }
+      } 
+  
+      // Note! We have to set this
+      // up after we have defined the
+      // functions (methods): self.dragOn etc. 
+      O.addEventListener("mousedown",self.dragOn,true);
+      O.addEventListener("mouseup",self.dragOff,true);
+    }
+    document.addEventListener("click",self.dragOff,false);
+  
+  }
   // T = title (appears on header.
   var title=T;
 
+  // FIXME: we shouldn't overwrite 'self' - it is reserved.
+  // Use 'me' instead.
   var self=this;
 
 
@@ -166,6 +173,17 @@ function Logger(T) {
     }
     else if( obj.attachEvent ) {
       obj.attachEvent('on'+eventType , fn);
+    }
+    else {
+      throw new Error('E2: '+ErrorMessages('E2'));
+    }
+  }
+  function removeEvent(obj,eventType,fn) {
+    if( obj.removeEventListener ) {
+      obj.removeEventListener(eventType,fn,false);
+    }
+    else if( obj.detachEvent ) {
+      obj.detachEvent('on'+eventType , fn);
     }
     else {
       throw new Error('E2: '+ErrorMessages('E2'));

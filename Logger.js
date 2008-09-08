@@ -180,13 +180,6 @@ function Logger(logTitle) {
     //me.log('Using absolute positioning.');
   }
 
-  this.show = function() {
-    logFrame.style.visibility='visible';
-  }
-  this.hide = function() {
-    logFrame.style.visibility='hidden';
-  }
-
   // LogDragDropServer (LDDS)
   //
   // Our Logger function has to be self-contained.

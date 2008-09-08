@@ -32,7 +32,7 @@
 
 
 function Logger(logTitle) {
-  //
+
   // Wrapper function to handle non-standard IE
   // DOM event handling.  We only handle the
   // bubbling phase of events here.
@@ -45,7 +45,7 @@ function Logger(logTitle) {
   //   Object.prototype.addEvent = addEvent;
   // and remove 'obj' from addEvent and use 'this'
   // instead.  But doesn't work in IE6.
-  //
+
   function addEvent(obj,eventType,fn) {
     if( obj.addEventListener ) {
       obj.addEventListener(eventType,fn,false);

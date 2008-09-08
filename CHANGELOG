@@ -1,8 +1,10 @@
 DB - Daniel Bush
 
 v0.2 [not released]
-* Logger opens in top right corner of the screen [DB] 8-Sep-08. 
-* Logger uses fixed positioning on moder browsers [DB] 8-Sep-08. 
+* Logger opens in top right corner of the screen. [DB] 8-Sep-08. 
+* Logger uses fixed positioning on moder browsers. [DB] 8-Sep-08. 
+* Logger can be minimized and restored; minimizing
+  puts logger into the top right corner of the screen.  [DB] 8-Sep-08. 
 
 v0.1 - 8-Sep-08
 First release.

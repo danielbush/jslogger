@@ -191,16 +191,8 @@ function Logger(logTitle) {
     var mouseX,objX;
     var mouseY,objY;
     var obj=null;
-    this.dragOn = function(e) {
-      //if (obj) me.dragOff(e);
-      if ( e.currentTarget==null ) {
-        throw new Error("DragDropServer:Invalid event has been supplied to dragOn method.");
-      }
-      var F = e.currentTarget.findObj; 
-      obj=( F ? F(e) : e.currentTarget );
-      if (obj==null ) {
-        throw new Error("DragDropServer:findObj failed to find object!");
-      }
+    var dragOn = function(e,O1) {
+      obj=O1;
       mouseX=parseInt(e.clientX);
       mouseY=parseInt(e.clientY);
       objX = parseInt(obj.style.left+0);
@@ -208,10 +200,7 @@ function Logger(logTitle) {
       //document.addEventListener("mousemove",me.drag,false);
       addEvent(document,"mousemove",me.drag);
     }
-    this.dragOff = function(e) {
-      //document.removeEventListener("mousemove",me.drag,false);
-      removeEvent(document,"mousemove",me.drag);
-      //document.removeEventListener("mousemove",me.drag,false);
+    var dragOff = function(e,O1) {
       removeEvent(document,"mousemove",me.drag);
       obj=null;
     }
@@ -233,7 +222,7 @@ function Logger(logTitle) {
     // If not there, then it defaults to e.currentTarget.
 
     var registrations={};
-    this.register = function(id,O,F) {
+    this.register = function(O1,O,F) {
       if ( ! O.nodeType || O.nodeType!=1 ) {
         throw new Error("DragDropServer.register:Invalid element supplied.");
       }
@@ -251,19 +240,20 @@ function Logger(logTitle) {
 
       //O.addEventListener("mousedown",me.dragOn,true);
       //addEvent(O,"mousedown",me.dragOn);
-      addEvent(O,"mousedown",function(e){me.dragOn(e);});
+      addEvent(O,"mousedown",function(e){dragOn(e,O1);});
 
       //O.addEventListener("mouseup",me.dragOff,true);
       //addEvent(O,"mouseup",me.dragOff);
-      addEvent(O,"mouseup",function(e){me.dragOff(e);});
+      addEvent(O,"mouseup",function(e){dragOff(e,O1);});
     }
 
+    // What is this for?
     //document.addEventListener("click",me.dragOff,false);
-    addEvent(document,"click",me.dragOff);
+    //addEvent(document,"click",me.dragOff);
   
   }
   var dragDropServer = new LogDragDropServer();
-  dragDropServer.register(ID,logHeader,findObj);
+  dragDropServer.register(logFrame,logHeader,findObj);
 
 
   return this;

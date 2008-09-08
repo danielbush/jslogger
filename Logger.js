@@ -32,7 +32,42 @@
 
 
 function Logger(logTitle) {
-  var logger_zindex=0;
+  //
+  // Wrapper function to handle non-standard IE
+  // DOM event handling.  We only handle the
+  // bubbling phase of events here.
+  // For obj.attachEvent:
+  // The pointer 'this' apparently points
+  // to the 'window' object - so beware.
+  // See http://ejohn.org/projects/flexible-javascript-events/
+  // (John Resig).
+  // I'd like to do something like this:
+  //   Object.prototype.addEvent = addEvent;
+  // and remove 'obj' from addEvent and use 'this'
+  // instead.  But doesn't work in IE6.
+  //
+  function addEvent(obj,eventType,fn) {
+    if( obj.addEventListener ) {
+      obj.addEventListener(eventType,fn,false);
+    }
+    else if( obj.attachEvent ) {
+      obj.attachEvent('on'+eventType , fn);
+    }
+    else {
+      throw new Error('E2: '+ErrorMessages('E2'));
+    }
+  }
+  function removeEvent(obj,eventType,fn) {
+    if( obj.removeEventListener ) {
+      obj.removeEventListener(eventType,fn,false);
+    }
+    else if( obj.detachEvent ) {
+      obj.detachEvent('on'+eventType , fn);
+    }
+    else {
+      throw new Error('E2: '+ErrorMessages('E2'));
+    }
+  }
 
   // Our Logger function has to be self-contained.
   // So it is going to have its own drag drop code.
@@ -119,6 +154,7 @@ function Logger(logTitle) {
   }
 
 
+  var logger_zindex=0;
   var ErrorMessages = {
     'E1': "Body-tag not loaded yet - can't set up Logger!" ,
     'E2': "Can't work out event handling interface."
@@ -153,42 +189,6 @@ function Logger(logTitle) {
   var logTable = document.createElement("table");
   var tbody = document.createElement("tbody");
 
-  //
-  // Wrapper function to handle non-standard IE
-  // DOM event handling.  We only handle the
-  // bubbling phase of events here.
-  // For obj.attachEvent:
-  // The pointer 'this' apparently points
-  // to the 'window' object - so beware.
-  // See http://ejohn.org/projects/flexible-javascript-events/
-  // (John Resig).
-  // I'd like to do something like this:
-  //   Object.prototype.addEvent = addEvent;
-  // and remove 'obj' from addEvent and use 'this'
-  // instead.  But doesn't work in IE6.
-  //
-  function addEvent(obj,eventType,fn) {
-    if( obj.addEventListener ) {
-      obj.addEventListener(eventType,fn,false);
-    }
-    else if( obj.attachEvent ) {
-      obj.attachEvent('on'+eventType , fn);
-    }
-    else {
-      throw new Error('E2: '+ErrorMessages('E2'));
-    }
-  }
-  function removeEvent(obj,eventType,fn) {
-    if( obj.removeEventListener ) {
-      obj.removeEventListener(eventType,fn,false);
-    }
-    else if( obj.detachEvent ) {
-      obj.detachEvent('on'+eventType , fn);
-    }
-    else {
-      throw new Error('E2: '+ErrorMessages('E2'));
-    }
-  }
 
   // The reason we hide the logBody is because it can
   // cause performance/cpu issues (as tested in 

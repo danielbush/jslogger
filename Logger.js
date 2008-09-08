@@ -120,9 +120,7 @@ function Logger(T) {
   // T = title (appears on header.
   var title=T;
 
-  // FIXME: we shouldn't overwrite 'self' - it is reserved.
-  // Use 'me' instead.
-  var self=this;
+  var me=this;
 
 
   var ErrorMessages = {
@@ -266,7 +264,7 @@ function Logger(T) {
   }
   this.hide = function() {
     logFrame.style.visibility='hidden';
-    self.log("Hiding.")
+    me.log("Hiding.")
   }
 
 
@@ -287,10 +285,10 @@ function Logger(T) {
       if ( o.getAttribute("id")==ID ) {
         return o.parentNode;
       }
-      self.log("iterating...");
+      me.log("iterating...");
       o=o.parentNode;
     }
-    self.log("Logger.findObj:Failed to find object.");
+    me.log("Logger.findObj:Failed to find object.");
     return null;
   }
   var dragDropServer = new LogDragDropServer();

@@ -154,26 +154,24 @@ function Logger(logTitle) {
   }
 
 
-  var logger_zindex=0;
   var ErrorMessages = {
     'E1': "Body-tag not loaded yet - can't set up Logger!" ,
     'E2': "Can't work out event handling interface."
   };
   
 
+  var logger_zindex=0;
   var title=logTitle;
 
   var me=this;
 
-  // Throw error and alert user if body-tag not loaded
-  // yet.
+  // Throw error and alert user if body-tag not loaded yet.
   var body;
   body=document.getElementsByTagName("BODY")[0];
   if (!body) {
     alert("E1: "+ErrorMessages['E1']);
     throw new Error("E1: "+ErrorMessages['E1']);
   }
-
 
   var n=0;
   while ( document.getElementById("Logger"+n) != null ) {
@@ -190,18 +188,9 @@ function Logger(logTitle) {
   var tbody = document.createElement("tbody");
 
 
-  // The reason we hide the logBody is because it can
-  // cause performance/cpu issues (as tested in 
-  // Firefox).  Setting visibility doesn't fix the problem - 
-  // only if we used display:none does performance 
-  // improve.
-  // FIXME: does display='none' => display=null exhibit
-  // the same kind of behaviour in IE?
-  // Note, I am forced to do it because setting other
-  // values like 'block' does strange things (in 
-  // Firefox) - that's why, I end up setting it 
-  // *back* to NULL again.
-  //
+  // Hide log body when dragging.
+  // We override the element's style attribute to 'none'.
+  // Hiding the body may give better performance.
   addEvent(logHeader,"mousedown",
     function() { logBody.style.display="none" });
   addEvent(logHeader,"mouseup",
@@ -242,8 +231,9 @@ function Logger(logTitle) {
 
 
 
-  // This is the logging function.
   var logEntry=1;
+
+  // Log messages.
   this.log = function(msg) {
     logFrame.style.zIndex=++logger_zindex;
     var tr = document.createElement("tr");
@@ -271,9 +261,7 @@ function Logger(logTitle) {
   // the LogDragDropServer here so that
   // we can make use of Logger's log 
   // function (for debugging).
-  // I thought that was kinda neat, but
-  // it isn't useful now because there aren't
-  // any bugs.
+
   var findObj = function (e) { 
     // FIXME: By using e.target
     // we assume that the DragDropServer

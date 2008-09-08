@@ -94,7 +94,7 @@ function Logger(logTitle) {
   while ( document.getElementById("Logger"+n) != null ) {
     n++
   }
-  var ID = Logger+ID;
+  var ID = 'Logger'+n;
 
 
 
@@ -121,6 +121,7 @@ function Logger(logTitle) {
   logFrame.style.position='absolute';
   logFrame.style.border='solid black 1px';
   logFrame.style.backgroundColor='white';
+  logFrame.setAttribute("id",ID);
 
   logHeader.style.backgroundColor="black";
   logHeader.style.color="white";
@@ -128,11 +129,6 @@ function Logger(logTitle) {
   logHeader.style.fontWeight="bold";
   logHeader.style.fontSize="9pt";
   logHeader.style.paddingBottom="1px";
-  // Note where I set the id.
-  // I guess it doesn't matter.
-  // We could rewrite findObj
-  // below.
-  logHeader.setAttribute("id",ID);
 
   logBody.style.height='500px';
   logBody.style.overflow='scroll';
@@ -187,7 +183,7 @@ function Logger(logTitle) {
     var o = e.target;
     while(o) {
       if ( o.getAttribute("id")==ID ) {
-        return o.parentNode;
+        return o;
       }
       me.log("iterating...");
       o=o.parentNode;

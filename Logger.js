@@ -54,7 +54,7 @@ function Logger(logTitle) {
       obj.attachEvent('on'+eventType , fn);
     }
     else {
-      throw new Error('E2: '+ErrorMessages('E2'));
+      throw new Error('E2: '+ErrorMessages['E2']);
     }
   }
 
@@ -66,7 +66,7 @@ function Logger(logTitle) {
       obj.detachEvent('on'+eventType , fn);
     }
     else {
-      throw new Error('E2: '+ErrorMessages('E2'));
+      throw new Error('E2: '+ErrorMessages['E2']);
     }
   }
 
@@ -105,6 +105,7 @@ function Logger(logTitle) {
   // logTable: log entries are rows in the table.
 
   var logFrame = document.createElement("div");
+  var logHeader2 = document.createElement("div");
   var logHeader = document.createElement("div");
   var logBody = document.createElement("div");
   var logTable = document.createElement("table");
@@ -136,6 +137,14 @@ function Logger(logTitle) {
   logHeader.style.paddingBottom="1px";
   logHeader.style.cursor="move";
 
+  logHeader2.style.backgroundColor="#333";
+  logHeader2.style.color="white";
+  logHeader2.style.fontSize="7pt";
+  logHeader2.style.paddingBottom="1px";
+  logHeader2.style.paddingRight="1em";
+  logHeader2.style.cursor="pointer";
+  logHeader2.style.textAlign="right";
+
   // Disable text selection when using logHeader as a drag
   // handle.
 
@@ -149,6 +158,7 @@ function Logger(logTitle) {
   logTable.appendChild(tbody);
   logBody.appendChild(logTable);
   logFrame.appendChild(logHeader);
+  logFrame.appendChild(logHeader2);
   logFrame.appendChild(logBody);
   body.appendChild(logFrame);
 
@@ -179,6 +189,39 @@ function Logger(logTitle) {
   } else {
     //me.log('Using absolute positioning.');
   }
+
+  var minimized=false;
+  var restore;
+  this.minimize = function() {
+    if (!minimized) {
+      restore={'top':logFrame.style.top,'right':logFrame.style.right}
+      logBody.style.display="none";
+      logFrame.style.right='0px';
+      logFrame.style.top='0px';
+      minimized=true;
+    }
+  }
+  this.restore = function() {
+    if(minimized) {
+      minimized=false;
+      logFrame.style.right=restore['right'];
+      logFrame.style.top=restore['top'];
+      logBody.style.display="";
+    }
+  }
+  // Build minimize link.
+  var span;
+  span = document.createElement('SPAN');
+  span.appendChild( document.createTextNode('restore') );
+  span.style.marginRight='1em';
+  logHeader2.appendChild(span);
+  addEvent(span,'click',me.restore);
+
+  span = document.createElement('SPAN');
+  span.appendChild( document.createTextNode('minimize') );
+  logHeader2.appendChild(span);
+  addEvent(span,'click',me.minimize);
+
 
   // LogDragDropServer (LDDS)
   //

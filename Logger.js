@@ -232,7 +232,8 @@ function Logger(logTitle) {
     // this function (currently called 'findObj');
     // If not there, then it defaults to e.currentTarget.
 
-    this.register = function(O,F) {
+    var registrations={};
+    this.register = function(id,O,F) {
       if ( ! O.nodeType || O.nodeType!=1 ) {
         throw new Error("DragDropServer.register:Invalid element supplied.");
       }
@@ -247,17 +248,22 @@ function Logger(logTitle) {
       // Note! We have to set this
       // up after we have defined the
       // functions (methods): me.dragOn etc. 
+
       //O.addEventListener("mousedown",me.dragOn,true);
-      addEvent(O,"mousedown",me.dragOn);
+      //addEvent(O,"mousedown",me.dragOn);
+      addEvent(O,"mousedown",function(e){me.dragOn(e);});
+
       //O.addEventListener("mouseup",me.dragOff,true);
-      addEvent(O,"mouseup",me.dragOff);
+      //addEvent(O,"mouseup",me.dragOff);
+      addEvent(O,"mouseup",function(e){me.dragOff(e);});
     }
+
     //document.addEventListener("click",me.dragOff,false);
     addEvent(document,"click",me.dragOff);
   
   }
   var dragDropServer = new LogDragDropServer();
-  dragDropServer.register(logHeader,findObj);
+  dragDropServer.register(ID,logHeader,findObj);
 
 
   return this;

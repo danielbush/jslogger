@@ -72,6 +72,7 @@ function Logger(logTitle) {
 
 
 
+
   var ErrorMessages = {
     'E1': "Body-tag not loaded yet - can't set up Logger!" ,
     'E2': "Can't work out event handling interface."
@@ -168,6 +169,15 @@ function Logger(logTitle) {
     //tbody.appendChild(tr);
     tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
     logEntry++;
+  }
+
+  // IE 7 and up generally handle position fixed.
+  var agt=navigator.userAgent.toLowerCase();
+  if ( agt.indexOf("msie 6.")==-1 && agt.indexOf("msie 5.5")==-1 ) {
+    logFrame.style.position='fixed';
+    //me.log('Using fixed positioning.');
+  } else {
+    //me.log('Using absolute positioning.');
   }
 
   this.show = function() {

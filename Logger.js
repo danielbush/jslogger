@@ -108,10 +108,13 @@ function Logger(T) {
       // Note! We have to set this
       // up after we have defined the
       // functions (methods): self.dragOn etc. 
-      O.addEventListener("mousedown",self.dragOn,true);
-      O.addEventListener("mouseup",self.dragOff,true);
+      //O.addEventListener("mousedown",self.dragOn,true);
+      addEvent(O,"mousedown",self.dragOn);
+      //O.addEventListener("mouseup",self.dragOff,true);
+      addEvent(O,"mouseup",self.dragOff);
     }
-    document.addEventListener("click",self.dragOff,false);
+    //document.addEventListener("click",self.dragOff,false);
+    addEvent(document,"click",self.dragOff);
   
   }
   // T = title (appears on header.

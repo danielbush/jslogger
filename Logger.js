@@ -31,7 +31,7 @@
 
 
 
-function Logger(T) {
+function Logger(logTitle) {
   var logger_zindex=0;
 
   // Our Logger function has to be self-contained.
@@ -44,7 +44,7 @@ function Logger(T) {
   function LogDragDropServer() { 
   
     var me=this;
-    var B = document.getElementsByTagName("BODY")[0];
+    var body = document.getElementsByTagName("BODY")[0];
     var mouseX,objX;
     var mouseY,objY;
   
@@ -117,10 +117,6 @@ function Logger(T) {
     addEvent(document,"click",me.dragOff);
   
   }
-  // T = title (appears on header.
-  var title=T;
-
-  var me=this;
 
 
   var ErrorMessages = {
@@ -129,12 +125,15 @@ function Logger(T) {
   };
   
 
+  var title=logTitle;
+
+  var me=this;
 
   // Throw error and alert user if body-tag not loaded
   // yet.
-  var B;
-  B=document.getElementsByTagName("BODY")[0];
-  if (!B) {
+  var body;
+  body=document.getElementsByTagName("BODY")[0];
+  if (!body) {
     alert("E1: "+ErrorMessages['E1']);
     throw new Error("E1: "+ErrorMessages['E1']);
   }
@@ -239,7 +238,7 @@ function Logger(T) {
   logBody.appendChild(logTable);
   logFrame.appendChild(logHeader);
   logFrame.appendChild(logBody);
-  B.appendChild(logFrame);
+  body.appendChild(logFrame);
 
 
 
@@ -293,6 +292,7 @@ function Logger(T) {
   }
   var dragDropServer = new LogDragDropServer();
   dragDropServer.register(logHeader,findObj);
+
 
   return this;
 }

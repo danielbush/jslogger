@@ -160,7 +160,7 @@ function Logger(logTitle) {
     tr.appendChild(td);
     var trs = tbody.getElementsByTagName("tr");
     //tbody.appendChild(tr);
-    tbody.insertBefore(tr,trs[0]);
+    tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
     logEntry++;
   }
 

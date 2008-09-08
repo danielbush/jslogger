@@ -43,7 +43,7 @@ function Logger(T) {
   
   function LogDragDropServer() { 
   
-    var self=this;
+    var me=this;
     var B = document.getElementsByTagName("BODY")[0];
     var mouseX,objX;
     var mouseY,objY;
@@ -54,7 +54,7 @@ function Logger(T) {
   
     var obj=null;
     this.dragOn = function(e) {
-      //if (obj) self.dragOff(e);
+      //if (obj) me.dragOff(e);
       if ( e.currentTarget==null ) {
         throw new Error("DragDropServer:Invalid event has been supplied to dragOn method.");
       }
@@ -67,14 +67,14 @@ function Logger(T) {
       mouseY=parseInt(e.clientY);
       objX = parseInt(obj.style.left+0);
       objY = parseInt(obj.style.top+0);
-      //document.addEventListener("mousemove",self.drag,false);
-      addEvent(document,"mousemove",self.drag);
+      //document.addEventListener("mousemove",me.drag,false);
+      addEvent(document,"mousemove",me.drag);
     }
     this.dragOff = function(e) {
-      //document.removeEventListener("mousemove",self.drag,false);
-      removeEvent(document,"mousemove",self.drag);
-      //document.removeEventListener("mousemove",self.drag,false);
-      removeEvent(document,"mousemove",self.drag);
+      //document.removeEventListener("mousemove",me.drag,false);
+      removeEvent(document,"mousemove",me.drag);
+      //document.removeEventListener("mousemove",me.drag,false);
+      removeEvent(document,"mousemove",me.drag);
       obj=null;
     }
     this.drag = function(e) {
@@ -107,14 +107,14 @@ function Logger(T) {
   
       // Note! We have to set this
       // up after we have defined the
-      // functions (methods): self.dragOn etc. 
-      //O.addEventListener("mousedown",self.dragOn,true);
-      addEvent(O,"mousedown",self.dragOn);
-      //O.addEventListener("mouseup",self.dragOff,true);
-      addEvent(O,"mouseup",self.dragOff);
+      // functions (methods): me.dragOn etc. 
+      //O.addEventListener("mousedown",me.dragOn,true);
+      addEvent(O,"mousedown",me.dragOn);
+      //O.addEventListener("mouseup",me.dragOff,true);
+      addEvent(O,"mouseup",me.dragOff);
     }
-    //document.addEventListener("click",self.dragOff,false);
-    addEvent(document,"click",self.dragOff);
+    //document.addEventListener("click",me.dragOff,false);
+    addEvent(document,"click",me.dragOff);
   
   }
   // T = title (appears on header.

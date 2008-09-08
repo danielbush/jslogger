@@ -83,6 +83,7 @@ function Logger(logTitle) {
   var me=this;
 
   // Throw error and alert user if body-tag not loaded yet.
+
   var body;
   body=document.getElementsByTagName("BODY")[0];
   if (!body) {
@@ -90,13 +91,14 @@ function Logger(logTitle) {
     throw new Error("E1: "+ErrorMessages['E1']);
   }
 
+  // Set ID according to how many loggers are on the
+  // page already.
+
   var n=0;
   while ( document.getElementById("Logger"+n) != null ) {
     n++
   }
   var ID = 'Logger'+n;
-
-
 
   var logFrame = document.createElement("div");
   var logHeader = document.createElement("div");
@@ -104,15 +106,14 @@ function Logger(logTitle) {
   var logTable = document.createElement("table");
   var tbody = document.createElement("tbody");
 
-
   // Hide log body when dragging.
   // We override the element's style attribute to 'none'.
   // Hiding the body may give better performance.
+
   addEvent(logHeader,"mousedown",
     function() { logBody.style.display="none"; });
   addEvent(logHeader,"mouseup",
     function() { logBody.style.display=null; });
-
 
   logFrame.style.left='200px';
   logFrame.style.top='0px';
@@ -133,8 +134,6 @@ function Logger(logTitle) {
   logBody.style.height='500px';
   logBody.style.overflow='scroll';
 
-
-
   logHeader.appendChild(document.createTextNode("log: "+title));
   logTable.appendChild(tbody);
   logBody.appendChild(logTable);
@@ -148,7 +147,7 @@ function Logger(logTitle) {
 
   // Log messages.
   this.log = function(msg) {
-    logFrame.style.zIndex=++logger_zindex;
+    logFrame.style.zIndex=++logger_zindex; // Why do we do this?
     var tr = document.createElement("tr");
     var td = document.createElement("td");
     td.style.fontFamily="Courier,monospace";

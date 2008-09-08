@@ -113,7 +113,7 @@ function Logger(logTitle) {
   addEvent(logHeader,"mousedown",
     function() { logBody.style.display="none"; });
   addEvent(logHeader,"mouseup",
-    function() { logBody.style.display=null; });
+    function() { logBody.style.display=""; });
 
   logFrame.style.left='200px';
   logFrame.style.top='0px';

@@ -176,20 +176,7 @@ function Logger(logTitle) {
   // function (for debugging).
 
   var findObj = function (e) { 
-    // FIXME: By using e.target
-    // we assume that the DragDropServer
-    // is going to set up an appropriate
-    // listener (for mouse clicks).
-    var o = e.target;
-    while(o) {
-      if ( o.getAttribute("id")==ID ) {
-        return o;
-      }
-      me.log("iterating...");
-      o=o.parentNode;
-    }
-    me.log("Logger.findObj:Failed to find object.");
-    return null;
+    return document.getElementById(ID);
   }
 
   // Our Logger function has to be self-contained.

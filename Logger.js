@@ -219,7 +219,7 @@ function Logger(logTitle) {
       obj=O1;
       mouseX=parseInt(e.clientX);
       mouseY=parseInt(e.clientY);
-      objX = parseInt(obj.style.left+0);
+      objX = parseInt(obj.style.right+0);
       objY = parseInt(obj.style.top+0);
       addEvent(document,"mousemove",drag);
     }
@@ -228,7 +228,7 @@ function Logger(logTitle) {
       obj=null;
     }
     var drag = function(e) {
-      obj.style.left = objX+e.clientX-mouseX+'px';
+      obj.style.right = objX-(e.clientX-mouseX)+'px';
       obj.style.top = objY+e.clientY-mouseY+'px';
     }
 

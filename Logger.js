@@ -130,6 +130,12 @@ function Logger(logTitle) {
   logHeader.style.fontWeight="bold";
   logHeader.style.fontSize="9pt";
   logHeader.style.paddingBottom="1px";
+  logHeader.style.cursor="move";
+
+  // Disable text selection when using logHeader as a drag
+  // handle.
+  logHeader.style.MozUserSelect="none";  // Firefox.
+  logHeader.unselectable="on"; // IE ???
 
   logBody.style.height='500px';
   logBody.style.overflow='scroll';

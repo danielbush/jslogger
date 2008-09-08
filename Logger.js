@@ -95,9 +95,7 @@ function Logger(logTitle) {
   // page already.
 
   var n=0;
-  while ( document.getElementById("Logger"+n) != null ) {
-    n++
-  }
+  while ( document.getElementById("Logger"+n) ) n++;
   var ID = 'Logger'+n;
 
   var logFrame = document.createElement("div");

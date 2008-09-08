@@ -179,11 +179,31 @@ function Logger(logTitle) {
     return document.getElementById(ID);
   }
 
+  // LogDragDropServer (LDDS)
+  //
   // Our Logger function has to be self-contained.
   // So it is going to have its own drag drop code.
   // This is a version of DragDropServer but it is
   // not intended for general use.  We include it 
   // here as part of the internals of Logger.
+  //
+  // We can only drag one thing at a time with our 
+  // mouse. LDDS maintains an 'obj' variable which
+  // represents the thing we are dragging at the time
+  // we click down with the mouse.
+  //
+  // We register our draggable item and its drag handle
+  // using the 'register' function.
+  // The life cycle of each drag operation is handled
+  // by dragOn, drag and dragOff respectively.
+  //
+  // Issues:
+  // If we set up two event handlers using LDDS which both
+  // catch the same event, things could get interesting.
+  // Or: we register the same drag handle twice.
+  // These things are not dealt with in this implementation
+  // yet.
+  // 
   
   function LogDragDropServer() { 
     var me=this;
@@ -197,7 +217,6 @@ function Logger(logTitle) {
       mouseY=parseInt(e.clientY);
       objX = parseInt(obj.style.left+0);
       objY = parseInt(obj.style.top+0);
-      //document.addEventListener("mousemove",me.drag,false);
       addEvent(document,"mousemove",drag);
     }
     var dragOff = function(e,O1) {

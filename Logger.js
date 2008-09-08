@@ -31,8 +31,8 @@
 
 
 
-var logger_zindex=0;
 function Logger(T) {
+  var logger_zindex=0;
 
   // Our Logger function has to be self-contained.
   // So it is going to have its own drag drop code.

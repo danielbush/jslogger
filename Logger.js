@@ -209,6 +209,8 @@ function Logger(logTitle) {
       obj.style.top = objY+e.clientY-mouseY+'px';
     }
 
+    // Register a draggable item along with its drag handle.
+    //
     // Draggable: a reference to the element we want to
     // drag.
     // DragHandle: a reference to the element which acts
@@ -216,20 +218,14 @@ function Logger(logTitle) {
 
     var registrations={};
     this.register = function(draggable,dragHandle) {
-  
-      //dragHandle.addEventListener("mousedown",me.dragOn,true);
-      //addEvent(dragHandle,"mousedown",me.dragOn);
       addEvent(dragHandle,"mousedown",function(e){dragOn(e,draggable);});
-
-      //dragHandle.addEventListener("mouseup",me.dragOff,true);
-      //addEvent(dragHandle,"mouseup",me.dragOff);
       addEvent(dragHandle,"mouseup",function(e){dragOff(e,draggable);});
     }
+
 
     // What is this for?
     //document.addEventListener("click",me.dragOff,false);
     //addEvent(document,"click",me.dragOff);
-  
   }
   var dragDropServer = new LogDragDropServer();
   dragDropServer.register(logFrame,logHeader);

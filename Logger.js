@@ -99,6 +99,10 @@ function Logger(logTitle) {
   while ( document.getElementById("Logger"+n) ) n++;
   var ID = 'Logger'+n;
 
+  // logFrame: the div containing logger.
+  // logHeader: a bit like the title bar at the top.
+  // logTable: log entries are rows in the table.
+
   var logFrame = document.createElement("div");
   var logHeader = document.createElement("div");
   var logBody = document.createElement("div");

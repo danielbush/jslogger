@@ -57,6 +57,7 @@ function Logger(logTitle) {
       throw new Error('E2: '+ErrorMessages('E2'));
     }
   }
+
   function removeEvent(obj,eventType,fn) {
     if( obj.removeEventListener ) {
       obj.removeEventListener(eventType,fn,false);
@@ -132,6 +133,7 @@ function Logger(logTitle) {
 
   // Disable text selection when using logHeader as a drag
   // handle.
+
   logHeader.style.MozUserSelect="none";  // Firefox.
   logHeader.unselectable="on"; // IE ???
 
@@ -169,17 +171,6 @@ function Logger(logTitle) {
   }
   this.hide = function() {
     logFrame.style.visibility='hidden';
-    me.log("Hiding.")
-  }
-
-
-  // We define findObj and pass it to
-  // the LogDragDropServer here so that
-  // we can make use of Logger's log 
-  // function (for debugging).
-
-  var findObj = function (e) { 
-    return document.getElementById(ID);
   }
 
   // LogDragDropServer (LDDS)
@@ -206,6 +197,9 @@ function Logger(logTitle) {
   // Or: we register the same drag handle twice.
   // These things are not dealt with in this implementation
   // yet.
+  // We could impose a locking mechanism which would 
+  // prevent the dragOn method being called if LDDS is
+  // already in use.
   // 
   
   function LogDragDropServer() { 
@@ -213,7 +207,10 @@ function Logger(logTitle) {
     var body = document.getElementsByTagName("BODY")[0];
     var mouseX,objX;
     var mouseY,objY;
+
+    // Draggable element.
     var obj=null;
+
     var dragOn = function(e,O1) {
       obj=O1;
       mouseX=parseInt(e.clientX);
@@ -240,18 +237,22 @@ function Logger(logTitle) {
 
     var registrations={};
     this.register = function(draggable,dragHandle) {
-      addEvent(dragHandle,"mousedown",function(e){dragOn(e,draggable);});
-      addEvent(dragHandle,"mouseup",function(e){dragOff(e,draggable);});
+      addEvent(dragHandle,"mousedown",
+        function(e){dragOn(e,draggable);});
+      addEvent(dragHandle,"mouseup",
+        function(e){dragOff(e,draggable);});
     }
-
 
     // What is this for?
     //document.addEventListener("click",me.dragOff,false);
     //addEvent(document,"click",me.dragOff);
   }
+
+  // Make logHeader a drag handle for dragging
+  // the logFrame.
+
   var dragDropServer = new LogDragDropServer();
   dragDropServer.register(logFrame,logHeader);
-
 
   return this;
 }

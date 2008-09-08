@@ -209,42 +209,21 @@ function Logger(logTitle) {
       obj.style.top = objY+e.clientY-mouseY+'px';
     }
 
-    // O = object to be dragged.
-    //
-    // F = function for finding the object to drag.
-    // Sometimes, we don't want e.currentTarget, but
-    // perhaps something relative to it like a parentNode.
-    //
-    // So, if we are given F, we will 'hang' it
-    // on O, which is a type=1 xhtml element.
-    // The dragOn function will always check for
-    // this function (currently called 'findObj');
-    // If not there, then it defaults to e.currentTarget.
+    // Draggable: a reference to the element we want to
+    // drag.
+    // DragHandle: a reference to the element which acts
+    // as our drag handle.
 
     var registrations={};
-    this.register = function(O1,O,F) {
-      if ( ! O.nodeType || O.nodeType!=1 ) {
-        throw new Error("DragDropServer.register:Invalid element supplied.");
-      }
-      if ( F ) {
-        if ( typeof(F)== "function" ) {
-          O.findObj=F;
-        } else { 
-          throw new Error("DragDropServer.register:Invalid findObj function supplied.");
-        }
-      } 
+    this.register = function(draggable,dragHandle) {
   
-      // Note! We have to set this
-      // up after we have defined the
-      // functions (methods): me.dragOn etc. 
+      //dragHandle.addEventListener("mousedown",me.dragOn,true);
+      //addEvent(dragHandle,"mousedown",me.dragOn);
+      addEvent(dragHandle,"mousedown",function(e){dragOn(e,draggable);});
 
-      //O.addEventListener("mousedown",me.dragOn,true);
-      //addEvent(O,"mousedown",me.dragOn);
-      addEvent(O,"mousedown",function(e){dragOn(e,O1);});
-
-      //O.addEventListener("mouseup",me.dragOff,true);
-      //addEvent(O,"mouseup",me.dragOff);
-      addEvent(O,"mouseup",function(e){dragOff(e,O1);});
+      //dragHandle.addEventListener("mouseup",me.dragOff,true);
+      //addEvent(dragHandle,"mouseup",me.dragOff);
+      addEvent(dragHandle,"mouseup",function(e){dragOff(e,draggable);});
     }
 
     // What is this for?
@@ -253,7 +232,7 @@ function Logger(logTitle) {
   
   }
   var dragDropServer = new LogDragDropServer();
-  dragDropServer.register(logFrame,logHeader,findObj);
+  dragDropServer.register(logFrame,logHeader);
 
 
   return this;

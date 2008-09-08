@@ -118,7 +118,7 @@ function Logger(logTitle) {
   addEvent(logHeader,"mouseup",
     function() { logBody.style.display=""; });
 
-  logFrame.style.left='200px';
+  logFrame.style.right='0px';
   logFrame.style.top='0px';
   logFrame.style.width='250px';
   logFrame.style.visibility='visible';

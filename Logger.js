@@ -245,15 +245,30 @@ function Logger(logTitle) {
   // Wrap button.
   // Wrap content lines or unwrap them.
   var wrapped=true;
-  logTable.style.width=width;
+
+  // Wrap or unwrap the lines in logTable.
+
   this.wrap = function() {
     if(wrapped) {
       logTable.style.width='2000px';
     } else {
-      // 16 is for the scroll bar on the right.
-      logTable.style.width=parseInt(width)-16+'px';
+      if(expandedWidth) {
+        logTable.style.width='90%';
+      } else {
+        // 16 is for the scroll bar on the right.
+        logTable.style.width=parseInt(width)-16+'px';
+      }
     }
     wrapped=!wrapped;
+  }
+
+  // Re-apply the wrap or unwrap; wrap
+  // is a toggle; so we pretend we're
+  // in the other state.
+
+  this.repeatWrap = function() {
+    wrapped=!wrapped;
+    me.wrap();
   }
   this.wrap();
   span = document.createElement('SPAN');
@@ -262,13 +277,32 @@ function Logger(logTitle) {
   logHeader2.appendChild(span);
   addEvent(span,'click',me.wrap);
 
-  // Expand button.
-  this.expand = function() {
+  // Set logger's width.
+
+  this.setWidth = function(w) {
+    logFrame.style.width=w;
+    logBody.style.width=w;
+    me.repeatWrap();
+  }
+
+  // Width button.
+  var expandedWidth=false;
+
+  // Toggle logger's width to 100% or 'width'.
+
+  this.expandWidth = function() {
+    if(expandedWidth) {
+      expandedWidth=false;  // Must call before setWidth.
+      me.setWidth(width);
+    } else {
+      expandedWidth=true;
+      me.setWidth('100%');
+    }
   }
   span = document.createElement('SPAN');
-  span.appendChild( document.createTextNode('expand') );
+  span.appendChild( document.createTextNode('width') );
   logHeader2.appendChild(span);
-  addEvent(span,'click',me.expand);
+  addEvent(span,'click',me.expandWidth);
 
 
   // DragServer (DS)

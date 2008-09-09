@@ -111,10 +111,12 @@ function Logger(logTitle) {
   var logTable = document.createElement("table");
   var tbody = document.createElement("tbody");
 
+  // Width of logger.
+  var width='250px';
 
   logFrame.style.right='0px';
   logFrame.style.top='0px';
-  logFrame.style.width='250px';
+  logFrame.style.width=width;
   logFrame.style.visibility='visible';
   logFrame.style.position='absolute';
   logFrame.style.border='solid black 1px';
@@ -144,6 +146,11 @@ function Logger(logTitle) {
   logHeader.unselectable="on"; // IE ???
 
   logBody.style.height='500px';
+
+  // We must set the width of logBody in order
+  // for the scroll setting to work.  Otherwise
+  // ie6 will just expand logBody.
+  logBody.style.width=width;
   logBody.style.overflow='scroll';
 
   logHeader.appendChild(document.createTextNode("log: "+title));
@@ -315,6 +322,11 @@ function Logger(logTitle) {
 
   var dragServer = new DragServer();
   dragServer.register(logFrame,logHeader);
+
+  /*
+  me.log('window.innerHeight: '+window.innerHeight);
+  me.log('document.body.innerHeight: '+document.body.innerHeight);
+  */
 
   return this;
 }

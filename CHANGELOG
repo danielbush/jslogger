@@ -17,6 +17,7 @@ v0.2 [not released]
   puts logger into the top right corner of the screen.  [DB] 8-Sep-08. 
 * Logger has width button to expand width to 100% [DB] 9-Sep-08.
 * Logger has a wrap button to toggle line wrapping [DB] 9-Sep-08.
+Aim: Logger toggles between 100% or 50% height.
 
 v0.1 - 8-Sep-08
 First release.

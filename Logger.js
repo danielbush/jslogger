@@ -208,13 +208,26 @@ function Logger(logTitle) {
     }
   );
 
-  // Minimize and restore.
+  var buttonSpan;
+
+  // Minimization
+  //
+  // minimize(): toggle hiding of logBody.
+  //   When hiding, move logger to top corner of view port.
 
   var minimized=false;
   var restore;
   this.minimize = function() {
-    if (!minimized) {
+    if(minimized) {
+      minimized=false;
+      logFrame.style.right=restore['right'];
+      logFrame.style.top=restore['top'];
+      logBody.style.display="";
+    }
+    else {
+      // Get out of expandedWidth mode.
       if(expandedWidth) me.expandWidth();
+      // Record where we were.
       restore={'top':logFrame.style.top,'right':logFrame.style.right}
       logBody.style.display="none";
       logFrame.style.right='0px';
@@ -222,30 +235,18 @@ function Logger(logTitle) {
       minimized=true;
     }
   }
-  this.restore = function() {
-    if(minimized) {
-      minimized=false;
-      logFrame.style.right=restore['right'];
-      logFrame.style.top=restore['top'];
-      logBody.style.display="";
-    }
-  }
-  var span;
-  span = document.createElement('SPAN');
-  span.appendChild( document.createTextNode('restore') );
-  span.style.marginRight='1em';
-  logHeader2.appendChild(span);
-  addEvent(span,'click',me.restore);
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('minimize') );
+  buttonSpan.style.marginRight='1em';
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.minimize);
 
-  span = document.createElement('SPAN');
-  span.appendChild( document.createTextNode('minimize') );
-  span.style.marginRight='1em';
-  logHeader2.appendChild(span);
-  addEvent(span,'click',me.minimize);
-
-  // Wrapping of content lines.
-
-  // Wrap or unwrap the lines in logTable.
+  // Wrapping
+  //
+  // wrap(): toggle wrap or unwrap of lines in logTable.
+  // repeatWrap() Re-apply the wrap or unwrap;
+  //    (we pretend we're in the other state, and run wrap())
+  // Dont' wrap if we're minimized.
 
   this.wrap = function() {
     if(minimized) return;
@@ -261,21 +262,16 @@ function Logger(logTitle) {
     }
     wrapped=!wrapped;
   }
-
-  // Re-apply the wrap or unwrap; wrap
-  // is a toggle; so we pretend we're
-  // in the other state.
-
   this.repeatWrap = function() {
     if(minimized) return;
     wrapped=!wrapped;
     me.wrap();
   }
-  span = document.createElement('SPAN');
-  span.appendChild( document.createTextNode('wrap') );
-  span.style.marginRight='1em';
-  logHeader2.appendChild(span);
-  addEvent(span,'click',me.wrap);
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('wrap') );
+  buttonSpan.style.marginRight='1em';
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.wrap);
   var wrapped=true;
   this.wrap();
 
@@ -287,11 +283,11 @@ function Logger(logTitle) {
     me.repeatWrap();
   }
 
-  // Width button.
+  // Width expansion
+  //
+  // expandWidth(): Toggle logger's width to 100% or 'width'.
+
   var expandedWidth=false;
-
-  // Toggle logger's width to 100% or 'width'.
-
   this.expandWidth = function() {
     if(minimized) return;  // Do nothing.
     if(expandedWidth) {
@@ -302,10 +298,12 @@ function Logger(logTitle) {
       setWidth('100%');
     }
   }
-  span = document.createElement('SPAN');
-  span.appendChild( document.createTextNode('width') );
-  logHeader2.appendChild(span);
-  addEvent(span,'click',me.expandWidth);
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('width') );
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.expandWidth);
+
+  buttonSpan=null;
 
 
   // DragServer (DS)

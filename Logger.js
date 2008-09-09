@@ -243,13 +243,12 @@ function Logger(logTitle) {
   logHeader2.appendChild(span);
   addEvent(span,'click',me.minimize);
 
-  // Wrap button.
-  // Wrap content lines or unwrap them.
-  var wrapped=true;
+  // Wrapping of content lines.
 
   // Wrap or unwrap the lines in logTable.
 
   this.wrap = function() {
+    if(minimized) return;
     if(wrapped) {
       logTable.style.width='2000px';
     } else {
@@ -268,15 +267,17 @@ function Logger(logTitle) {
   // in the other state.
 
   this.repeatWrap = function() {
+    if(minimized) return;
     wrapped=!wrapped;
     me.wrap();
   }
-  this.wrap();
   span = document.createElement('SPAN');
   span.appendChild( document.createTextNode('wrap') );
   span.style.marginRight='1em';
   logHeader2.appendChild(span);
   addEvent(span,'click',me.wrap);
+  var wrapped=true;
+  this.wrap();
 
   // Set logger's width.
 

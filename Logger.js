@@ -208,27 +208,45 @@ function Logger(logTitle) {
     }
   );
 
+  // Set logger's width.
+
+  var setWidth = function(w) {
+    logFrame.style.width=w;
+    logBody.style.width=w;
+    me.repeatWrap();
+  }
+
+  var restore; // Place to store position.
+  var storePosition = function() {
+    restore={'top':logFrame.style.top,'right':logFrame.style.right}
+  }
+  var restorePosition = function() {
+    if (restore) {
+      logFrame.style.right=restore['right'];
+      logFrame.style.top=restore['top'];
+    }
+  }
+
   var buttonSpan;
 
   // Minimization
   //
   // minimize(): toggle hiding of logBody.
   //   When hiding, move logger to top corner of view port.
+  //   When unhiding, restore our position.
 
   var minimized=false;
-  var restore;
   this.minimize = function() {
     if(minimized) {
       minimized=false;
-      logFrame.style.right=restore['right'];
-      logFrame.style.top=restore['top'];
+      restorePosition();
       logBody.style.display="";
     }
     else {
       // Get out of expandedWidth mode.
       if(expandedWidth) me.expandWidth();
       // Record where we were.
-      restore={'top':logFrame.style.top,'right':logFrame.style.right}
+      storePosition();
       logBody.style.display="none";
       logFrame.style.right='0px';
       logFrame.style.top='0px';
@@ -275,17 +293,12 @@ function Logger(logTitle) {
   var wrapped=true;
   this.wrap();
 
-  // Set logger's width.
-
-  var setWidth = function(w) {
-    logFrame.style.width=w;
-    logBody.style.width=w;
-    me.repeatWrap();
-  }
 
   // Width expansion
   //
   // expandWidth(): Toggle logger's width to 100% or 'width'.
+  //   When expanding, move logger to the top right corner.
+  //   When unexpanding, restore the position we were in.
 
   var expandedWidth=false;
   this.expandWidth = function() {
@@ -293,7 +306,11 @@ function Logger(logTitle) {
     if(expandedWidth) {
       expandedWidth=false;  // Must call before setWidth.
       setWidth(width);
+      restorePosition();
     } else {
+      storePosition();
+      logFrame.style.right='0px';
+      logFrame.style.top='0px';
       expandedWidth=true;
       setWidth('100%');
     }

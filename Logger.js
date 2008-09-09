@@ -228,7 +228,6 @@ function Logger(logTitle) {
       logBody.style.display="";
     }
   }
-  // Build minimize link.
   var span;
   span = document.createElement('SPAN');
   span.appendChild( document.createTextNode('restore') );
@@ -238,9 +237,29 @@ function Logger(logTitle) {
 
   span = document.createElement('SPAN');
   span.appendChild( document.createTextNode('minimize') );
+  span.style.marginRight='1em';
   logHeader2.appendChild(span);
   addEvent(span,'click',me.minimize);
 
+  // Expand button.
+  // Wrap button.
+  // Wrap content lines or unwrap them.
+  var wrapped=true;
+  logTable.style.width=width;
+  this.wrap = function() {
+    if(wrapped) {
+      logTable.style.width='2000px';
+    } else {
+      // 16 is for the scroll bar on the right.
+      logTable.style.width=parseInt(width)-16+'px';
+    }
+    wrapped=!wrapped;
+  }
+  this.wrap();
+  span = document.createElement('SPAN');
+  span.appendChild( document.createTextNode('wrap') );
+  logHeader2.appendChild(span);
+  addEvent(span,'click',me.wrap);
 
   // DragServer (DS)
   //
@@ -325,7 +344,7 @@ function Logger(logTitle) {
 
   /*
   me.log('window.innerHeight: '+window.innerHeight);
-  me.log('document.body.innerHeight: '+document.body.innerHeight);
+  me.log('document.body.clientHeight: '+document.body.clientHeight);
   */
 
   return this;

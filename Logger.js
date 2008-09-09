@@ -214,6 +214,7 @@ function Logger(logTitle) {
   var restore;
   this.minimize = function() {
     if (!minimized) {
+      if(expandedWidth) me.expandWidth();
       restore={'top':logFrame.style.top,'right':logFrame.style.right}
       logBody.style.display="none";
       logFrame.style.right='0px';
@@ -279,7 +280,7 @@ function Logger(logTitle) {
 
   // Set logger's width.
 
-  this.setWidth = function(w) {
+  var setWidth = function(w) {
     logFrame.style.width=w;
     logBody.style.width=w;
     me.repeatWrap();
@@ -291,12 +292,13 @@ function Logger(logTitle) {
   // Toggle logger's width to 100% or 'width'.
 
   this.expandWidth = function() {
+    if(minimized) return;  // Do nothing.
     if(expandedWidth) {
       expandedWidth=false;  // Must call before setWidth.
-      me.setWidth(width);
+      setWidth(width);
     } else {
       expandedWidth=true;
-      me.setWidth('100%');
+      setWidth('100%');
     }
   }
   span = document.createElement('SPAN');

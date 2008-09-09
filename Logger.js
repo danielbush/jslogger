@@ -145,7 +145,8 @@ function Logger(logTitle) {
   logHeader.style.MozUserSelect="none";  // Firefox.
   logHeader.unselectable="on"; // IE ???
 
-  logBody.style.height='500px';
+  var height='500px';
+  logBody.style.height=height;
 
   // We must set the width of logBody in order
   // for the scroll setting to work.  Otherwise
@@ -241,7 +242,6 @@ function Logger(logTitle) {
   logHeader2.appendChild(span);
   addEvent(span,'click',me.minimize);
 
-  // Expand button.
   // Wrap button.
   // Wrap content lines or unwrap them.
   var wrapped=true;
@@ -258,8 +258,18 @@ function Logger(logTitle) {
   this.wrap();
   span = document.createElement('SPAN');
   span.appendChild( document.createTextNode('wrap') );
+  span.style.marginRight='1em';
   logHeader2.appendChild(span);
   addEvent(span,'click',me.wrap);
+
+  // Expand button.
+  this.expand = function() {
+  }
+  span = document.createElement('SPAN');
+  span.appendChild( document.createTextNode('expand') );
+  logHeader2.appendChild(span);
+  addEvent(span,'click',me.expand);
+
 
   // DragServer (DS)
   //

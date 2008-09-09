@@ -111,14 +111,6 @@ function Logger(logTitle) {
   var logTable = document.createElement("table");
   var tbody = document.createElement("tbody");
 
-  // Hide log body when dragging.
-  // We override the element's style attribute to 'none'.
-  // Hiding the body may give better performance.
-
-  addEvent(logHeader,"mousedown",
-    function() { logBody.style.display="none"; });
-  addEvent(logHeader,"mouseup",
-    function() { logBody.style.display=""; });
 
   logFrame.style.right='0px';
   logFrame.style.top='0px';
@@ -189,6 +181,26 @@ function Logger(logTitle) {
   } else {
     //me.log('Using absolute positioning.');
   }
+
+  // Hide log body when dragging.
+  // We override the element's style attribute 
+  // for display to 'none'.
+  // Hiding the body may give better performance.
+
+  addEvent(logHeader,"mousedown",
+    function() { 
+      logBody.style.display="none"; 
+      // Take us out of minimize mode.
+      if(minimized) minimized=false;
+    }
+  );
+  addEvent(logHeader,"mouseup",
+    function() { 
+      logBody.style.display=""; 
+    }
+  );
+
+  // Minimize and restore.
 
   var minimized=false;
   var restore;

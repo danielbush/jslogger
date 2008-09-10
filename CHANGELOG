@@ -15,9 +15,10 @@ v0.2 [not released]
 * Logger uses fixed positioning on moder browsers. [DB] 8-Sep-08. 
 * Logger can be minimized and restored; minimizing
   puts logger into the top right corner of the screen.  [DB] 8-Sep-08. 
-* Logger has width button to expand width to 100% [DB] 9-Sep-08.
+* Logger has '100%' width button to expand width to 100% [DB] 9-Sep-08.
 * Logger has a wrap button to toggle line wrapping [DB] 9-Sep-08.
-Aim: Logger toggles between 100% or 50% height.
+* Logger has incremental increase and decrease buttons 
+  for width and height [DB] 10-Sep-08.
 
 v0.1 - 8-Sep-08
 First release.

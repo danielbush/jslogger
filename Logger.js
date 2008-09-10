@@ -279,8 +279,8 @@ function Logger(logTitle) {
       if(expandedWidth) {
         logTable.style.width='90%';
       } else {
-        // 16 is for the scroll bar on the right.
-        logTable.style.width=parseInt(width)-16+'px';
+        // 20 is for the scroll bar on the right.
+        logTable.style.width=parseInt(width)-20+'px';
       }
     }
     wrapped=!wrapped;

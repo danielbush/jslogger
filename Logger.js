@@ -125,14 +125,16 @@ function Logger(logTitle) {
 
   logHeader.style.backgroundColor="black";
   logHeader.style.color="white";
-  logHeader.style.fontFamily="Courier,monospace";
+  logHeader.style.fontFamily="sans-serif";
   logHeader.style.fontWeight="bold";
   logHeader.style.fontSize="9pt";
   logHeader.style.paddingBottom="1px";
   logHeader.style.cursor="move";
+  logHeader.style.paddingLeft="0.5em";
 
   logHeader2.style.backgroundColor="#333";
   logHeader2.style.color="white";
+  logHeader2.style.fontFamily="sans-serif";
   logHeader2.style.fontSize="7pt";
   logHeader2.style.paddingBottom="1px";
   logHeader2.style.paddingRight="1em";

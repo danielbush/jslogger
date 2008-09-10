@@ -208,22 +208,26 @@ function Logger(logTitle) {
     }
   );
 
-  // Set logger's width.
+  // Some private helper functions.
+  //
+  // setWidth(): set width of logger; note the call
+  //   to re-wrap text.
+  // storePosition(): record our coordinates
+  // restorePosition(): move us to storedPosition.
 
   var setWidth = function(w) {
     logFrame.style.width=w;
     logBody.style.width=w;
     me.repeatWrap();
   }
-
-  var restore; // Place to store position.
+  var storedPosition; // Place to store position.
   var storePosition = function() {
-    restore={'top':logFrame.style.top,'right':logFrame.style.right}
+    storedPosition={'top':logFrame.style.top,'right':logFrame.style.right}
   }
   var restorePosition = function() {
-    if (restore) {
-      logFrame.style.right=restore['right'];
-      logFrame.style.top=restore['top'];
+    if (storedPosition) {
+      logFrame.style.right=storedPosition['right'];
+      logFrame.style.top=storedPosition['top'];
     }
   }
 
@@ -232,7 +236,8 @@ function Logger(logTitle) {
   // Minimization
   //
   // minimize(): toggle hiding of logBody.
-  //   When hiding, move logger to top corner of view port.
+  //   When hiding, move logger to top corner of view port
+  //   and record where we were.
   //   When unhiding, restore our position.
 
   var minimized=false;
@@ -264,7 +269,7 @@ function Logger(logTitle) {
   // wrap(): toggle wrap or unwrap of lines in logTable.
   // repeatWrap() Re-apply the wrap or unwrap;
   //    (we pretend we're in the other state, and run wrap())
-  // Dont' wrap if we're minimized.
+  // Don't wrap if we're minimized.
 
   this.wrap = function() {
     if(minimized) return;
@@ -326,8 +331,8 @@ function Logger(logTitle) {
   // DragServer (DS)
   //
   // Our Logger function has to be self-contained.
-  // So it is going to have its own drag drop code.
-  // This is a version of DragDropServer but it is
+  // So it is going to have its own drag code.
+  // This is a version of DragServer but it is
   // not intended for general use.  We include it 
   // here as part of the internals of Logger.
   //

@@ -335,12 +335,12 @@ function Logger(logTitle) {
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.expandWidth);
   this.increaseWidth = function() {
-    if(expandedWidth) return;
+    if(expandedWidth && !minimized) return;
     width=parseInt(width)+20+'px';
     setWidth(width);
   }
   this.decreaseWidth = function() {
-    if(expandedWidth) return;
+    if(expandedWidth && !minimized) return;
     if (parseInt(width)>20) width=parseInt(width)-20+'px';
     setWidth(width);
   }

@@ -79,7 +79,7 @@ function Logger(logTitle) {
   };
   
 
-  var logger_zindex=0;
+
   var title=logTitle;
 
   var me=this;
@@ -111,12 +111,9 @@ function Logger(logTitle) {
   var logTable = document.createElement("table");
   var tbody = document.createElement("tbody");
 
-  // Width of logger.
-  var width='250px';
 
   logFrame.style.right='0px';
   logFrame.style.top='0px';
-  logFrame.style.width=width;
   logFrame.style.visibility='visible';
   logFrame.style.position='absolute';
   logFrame.style.border='solid black 1px';
@@ -151,14 +148,22 @@ function Logger(logTitle) {
   makeUnselectable(logHeader);
   makeUnselectable(logHeader2);
 
-  var height='500px';
-  logBody.style.height=height;
 
+  // Width, height, zindex
+  //
   // We must set the width of logBody in order
   // for the scroll setting to work.  Otherwise
   // ie6 will just expand logBody.
+
+  var width='250px';
+  logFrame.style.width=width;
   logBody.style.width=width;
   logBody.style.overflow='scroll';
+  var height='500px';
+  logBody.style.height=height;
+  var zindex=1000;
+  logFrame.style.zIndex=zindex;
+
 
   logHeader.appendChild(document.createTextNode("log: "+title));
   logTable.appendChild(tbody);
@@ -174,7 +179,6 @@ function Logger(logTitle) {
 
   // Log messages.
   this.log = function(msg) {
-    logFrame.style.zIndex=++logger_zindex; // Why do we do this?
     var tr = document.createElement("tr");
     var td = document.createElement("td");
     td.style.fontFamily="Courier,monospace";
@@ -203,9 +207,12 @@ function Logger(logTitle) {
 
   addEvent(logHeader,"mousedown",
     function() { 
-      logBody.style.display="none"; 
       // Take us out of minimize mode.
-      if(minimized) minimized=false;
+      if(minimized) {
+        storePosition();
+        me.minimize();
+      }
+      logBody.style.display="none"; 
     }
   );
   addEvent(logHeader,"mouseup",

@@ -409,11 +409,6 @@ function Logger(logTitle) {
   var dragServer = new DragServer();
   dragServer.register(logFrame,logHeader);
 
-  /*
-  me.log('window.innerHeight: '+window.innerHeight);
-  me.log('document.body.clientHeight: '+document.body.clientHeight);
-  */
-
   return this;
 }
 

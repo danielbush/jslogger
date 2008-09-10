@@ -304,7 +304,8 @@ function Logger(logTitle) {
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.wrap);
-  var wrapped=true;
+  // By default, put us in wrapped mode.
+  var wrapped=false;
   this.wrap();
 
 
@@ -330,7 +331,7 @@ function Logger(logTitle) {
     }
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('width') );
+  buttonSpan.appendChild( document.createTextNode('100%') );
   buttonSpan.style.marginRight='1em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
@@ -358,11 +359,11 @@ function Logger(logTitle) {
   // Height expansion
 
   this.increaseHeight = function() {
-    height=parseInt(height)+20+'px';
+    height=parseInt(height)+30+'px';
     setHeight(height);
   }
   this.decreaseHeight = function() {
-    if (parseInt(height)>20) height=parseInt(height)-20+'px';
+    if (parseInt(height)>30) height=parseInt(height)-30+'px';
     setHeight(height);
   }
   buttonSpan = document.createElement('SPAN');

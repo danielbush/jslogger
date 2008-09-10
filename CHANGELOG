@@ -10,7 +10,7 @@ Aim: logger becomes a frame holding multiple log sessions.
        var LogHolder = new Logger();
        var myLog = LogHolder.createLog(logName);
 
-v0.2 [not released]
+v0.2 - 11-Sep-08
 * Logger opens in top right corner of the screen. [DB] 8-Sep-08. 
 * Logger uses fixed positioning on modern browsers. [DB] 8-Sep-08. 
 * Logger can be minimized and restored; minimizing

@@ -142,8 +142,12 @@ function Logger(logTitle) {
   // Disable text selection when using logHeader as a drag
   // handle.
 
-  logHeader.style.MozUserSelect="none";  // Firefox.
-  logHeader.unselectable="on"; // IE ???
+  var makeUnselectable = function(el) {
+    el.style.MozUserSelect="none";  // Firefox.
+    el.unselectable="on"; // IE ???
+  }
+  makeUnselectable(logHeader);
+  makeUnselectable(logHeader2);
 
   var height='500px';
   logBody.style.height=height;
@@ -220,6 +224,9 @@ function Logger(logTitle) {
     logBody.style.width=w;
     me.repeatWrap();
   }
+  var setHeight = function(h) {
+    logBody.style.height=h;
+  }
   var storedPosition; // Place to store position.
   var storePosition = function() {
     storedPosition={'top':logFrame.style.top,'right':logFrame.style.right}
@@ -261,6 +268,7 @@ function Logger(logTitle) {
   buttonSpan = document.createElement('SPAN');
   buttonSpan.appendChild( document.createTextNode('minimize') );
   buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.minimize);
 
@@ -293,6 +301,7 @@ function Logger(logTitle) {
   buttonSpan = document.createElement('SPAN');
   buttonSpan.appendChild( document.createTextNode('wrap') );
   buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.wrap);
   var wrapped=true;
@@ -323,20 +332,51 @@ function Logger(logTitle) {
   buttonSpan = document.createElement('SPAN');
   buttonSpan.appendChild( document.createTextNode('width') );
   buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.expandWidth);
+  this.increaseWidth = function() {
+    width=parseInt(width)+20+'px';
+    setWidth(width);
+  }
+  this.decreaseWidth = function() {
+    if (parseInt(width)>20) width=parseInt(width)-20+'px';
+    setWidth(width);
+  }
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('<') );
+  buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.increaseWidth);
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('>') );
+  buttonSpan.style.marginRight='1em';
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.decreaseWidth);
 
   // Height expansion
 
-  var expandedHeight = false;
-  this.expandHeight = function() {
-    if(minimized) return;
-    me.log('offsetTop: '+logFrame.offsetTop);
+  this.increaseHeight = function() {
+    height=parseInt(height)+20+'px';
+    setHeight(height);
+  }
+  this.decreaseHeight = function() {
+    if (parseInt(height)>20) height=parseInt(height)-20+'px';
+    setHeight(height);
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('height') );
+  buttonSpan.appendChild( document.createTextNode('\\/') );
+  buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
-  addEvent(buttonSpan,'click',me.expandHeight);
+  addEvent(buttonSpan,'click',me.increaseHeight);
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('/\\') );
+  buttonSpan.style.marginRight='1em';
+  makeUnselectable(buttonSpan);
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.decreaseHeight);
 
   buttonSpan=null;
 

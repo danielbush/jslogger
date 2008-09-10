@@ -366,15 +366,15 @@ function Logger(logTitle) {
     // Draggable element.
     var obj=null;
 
-    var dragOn = function(e,O1) {
-      obj=O1;
+    var dragOn = function(e,draggable) {
+      obj=draggable;
       mouseX=parseInt(e.clientX);
       mouseY=parseInt(e.clientY);
       objX = parseInt(obj.style.right+0);
       objY = parseInt(obj.style.top+0);
       addEvent(document,"mousemove",drag);
     }
-    var dragOff = function(e,O1) {
+    var dragOff = function(e,draggable) {
       removeEvent(document,"mousemove",drag);
       obj=null;
     }

@@ -200,26 +200,6 @@ function Logger(logTitle) {
     //me.log('Using absolute positioning.');
   }
 
-  // Hide log body when dragging.
-  // We override the element's style attribute 
-  // for display to 'none'.
-  // Hiding the body may give better performance.
-
-  addEvent(logHeader,"mousedown",
-    function() { 
-      // Take us out of minimize mode.
-      if(minimized) {
-        storePosition();
-        me.minimize();
-      }
-      logBody.style.display="none"; 
-    }
-  );
-  addEvent(logHeader,"mouseup",
-    function() { 
-      logBody.style.display=""; 
-    }
-  );
 
   // Some private helper functions.
   //
@@ -431,6 +411,10 @@ function Logger(logTitle) {
   // already in use.
   // 
   
+  this.isDraggable = function() {
+    if(expandedWidth) return false;
+    return true;
+  }
   function DragServer() { 
     var me=this;
     var body = document.getElementsByTagName("BODY")[0];
@@ -440,7 +424,8 @@ function Logger(logTitle) {
     // Draggable element.
     var obj=null;
 
-    var dragOn = function(e,draggable) {
+    var dragOn = function(e,draggable,canDrag) {
+      if(!canDrag()) return;
       obj=draggable;
       mouseX=parseInt(e.clientX);
       mouseY=parseInt(e.clientY);
@@ -448,7 +433,8 @@ function Logger(logTitle) {
       objY = parseInt(obj.style.top+0);
       addEvent(document,"mousemove",drag);
     }
-    var dragOff = function(e,draggable) {
+    var dragOff = function(e,draggable,canDrag) {
+      if(!canDrag()) return;
       removeEvent(document,"mousemove",drag);
       obj=null;
     }
@@ -463,13 +449,17 @@ function Logger(logTitle) {
     // drag.
     // DragHandle: a reference to the element which acts
     // as our drag handle.
+    // canDrag(): is a function that determines whether
+    // we proceed with the dragging operation.  Should return
+    // true or false.
+    //
 
     var registrations={};
-    this.register = function(draggable,dragHandle) {
+    this.register = function(draggable,dragHandle,canDrag) {
       addEvent(dragHandle,"mousedown",
-        function(e){dragOn(e,draggable);});
+        function(e){dragOn(e,draggable,canDrag);});
       addEvent(dragHandle,"mouseup",
-        function(e){dragOff(e,draggable);});
+        function(e){dragOff(e,draggable,canDrag);});
     }
 
     // What is this for?
@@ -481,7 +471,32 @@ function Logger(logTitle) {
   // the logFrame.
 
   var dragServer = new DragServer();
-  dragServer.register(logFrame,logHeader);
+  dragServer.register(logFrame,logHeader,me.isDraggable);
+
+  // Hide log body when dragging.
+  // We override the element's style attribute 
+  // for display to 'none'.
+  // Hiding the body may give better performance.
+
+  addEvent(logHeader,"mousedown",
+    function() { 
+      if(!me.isDraggable()) return;
+      // Take us out of minimize mode.
+      if(minimized) {
+        // Ensure minimize() will not move us
+        // to some other position.
+        storePosition();  
+        me.minimize();
+      }
+      logBody.style.display="none"; 
+    }
+  );
+  addEvent(logHeader,"mouseup",
+    function() { 
+      if(!me.isDraggable()) return;
+      logBody.style.display=""; 
+    }
+  );
 
   return this;
 }

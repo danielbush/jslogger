@@ -12,7 +12,7 @@ Aim: logger becomes a frame holding multiple log sessions.
 
 v0.2 [not released]
 * Logger opens in top right corner of the screen. [DB] 8-Sep-08. 
-* Logger uses fixed positioning on moder browsers. [DB] 8-Sep-08. 
+* Logger uses fixed positioning on modern browsers. [DB] 8-Sep-08. 
 * Logger can be minimized and restored; minimizing
   puts logger into the top right corner of the screen.  [DB] 8-Sep-08. 
 * Logger has '100%' width button to expand width to 100% [DB] 9-Sep-08.

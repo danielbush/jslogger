@@ -227,11 +227,6 @@ function Logger(logTitle) {
     if (storedPosition) {
       logFrame.style.right=storedPosition['right'];
       logFrame.style.top=storedPosition['top'];
-      // Put us back in expandedWidth mode.
-      if(expandedWidth) {
-        me.expandWidth();
-        me.expandWidth();
-      }
     }
   }
 
@@ -240,26 +235,15 @@ function Logger(logTitle) {
   // Minimization
   //
   // minimize(): toggle hiding of logBody.
-  //   When hiding, move logger to top corner of view port
-  //   and record where we were.
-  //   When unhiding, restore our position.
 
   var minimized=false;
   this.minimize = function() {
     if(minimized) {
       minimized=false;
-      restorePosition();
       logBody.style.display="";
     }
     else {
-      // Record where we were.
-      // If in expandedWidth mode, we've
-      // already done this.
-      if (!expandedWidth) storePosition();
-      else setWidth(width);
       logBody.style.display="none";
-      logFrame.style.right='0px';
-      logFrame.style.top='0px';
       minimized=true;
     }
   }
@@ -275,10 +259,8 @@ function Logger(logTitle) {
   // wrap(): toggle wrap or unwrap of lines in logTable.
   // repeatWrap() Re-apply the wrap or unwrap;
   //    (we pretend we're in the other state, and run wrap())
-  // Don't wrap if we're minimized.
 
   this.wrap = function() {
-    if(minimized) return;
     if(wrapped) {
       logTable.style.width='2000px';
     } else {
@@ -292,7 +274,6 @@ function Logger(logTitle) {
     wrapped=!wrapped;
   }
   this.repeatWrap = function() {
-    if(minimized) return;
     wrapped=!wrapped;
     me.wrap();
   }
@@ -315,7 +296,6 @@ function Logger(logTitle) {
 
   var expandedWidth=false;
   this.expandWidth = function() {
-    if(minimized) return;  // Do nothing.
     if(expandedWidth) {
       expandedWidth=false;  // Must call before setWidth.
       setWidth(width);
@@ -335,12 +315,12 @@ function Logger(logTitle) {
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.expandWidth);
   this.increaseWidth = function() {
-    if(expandedWidth && !minimized) return;
+    if(expandedWidth) return;
     width=parseInt(width)+20+'px';
     setWidth(width);
   }
   this.decreaseWidth = function() {
-    if(expandedWidth && !minimized) return;
+    if(expandedWidth) return;
     if (parseInt(width)>20) width=parseInt(width)-20+'px';
     setWidth(width);
   }
@@ -379,8 +359,24 @@ function Logger(logTitle) {
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.decreaseHeight);
 
-  buttonSpan=null;
 
+  // Snap
+  //
+  // Snap logger to top right corner of screen.
+
+  this.snap = function() {
+    logFrame.style.right='0px';
+    logFrame.style.top='0px';
+    storePosition();
+  }
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode(' snap ') );
+  buttonSpan.style.marginRight='0.2em';
+  makeUnselectable(buttonSpan);
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.snap);
+
+  buttonSpan=null;
 
   // DragServer (DS)
   //
@@ -481,20 +477,13 @@ function Logger(logTitle) {
   addEvent(logHeader,"mousedown",
     function() { 
       if(!me.isDraggable()) return;
-      // Take us out of minimize mode.
-      if(minimized) {
-        // Ensure minimize() will not move us
-        // to some other position.
-        storePosition();  
-        me.minimize();
-      }
-      logBody.style.display="none"; 
+      if(!minimized) me.minimize();
     }
   );
   addEvent(logHeader,"mouseup",
     function() { 
       if(!me.isDraggable()) return;
-      logBody.style.display=""; 
+      if(minimized) me.minimize();
     }
   );
 

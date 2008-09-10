@@ -322,8 +322,21 @@ function Logger(logTitle) {
   }
   buttonSpan = document.createElement('SPAN');
   buttonSpan.appendChild( document.createTextNode('width') );
+  buttonSpan.style.marginRight='1em';
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.expandWidth);
+
+  // Height expansion
+
+  var expandedHeight = false;
+  this.expandHeight = function() {
+    if(minimized) return;
+    me.log('offsetTop: '+logFrame.offsetTop);
+  }
+  buttonSpan = document.createElement('SPAN');
+  buttonSpan.appendChild( document.createTextNode('height') );
+  logHeader2.appendChild(buttonSpan);
+  addEvent(buttonSpan,'click',me.expandHeight);
 
   buttonSpan=null;
 

@@ -266,8 +266,8 @@ function Logger(logTitle) {
     }
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('minimize') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' minimize ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.minimize);
@@ -299,8 +299,8 @@ function Logger(logTitle) {
     me.wrap();
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('wrap') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' wrap ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.wrap);
@@ -331,28 +331,30 @@ function Logger(logTitle) {
     }
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('100%') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' 100% ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.expandWidth);
   this.increaseWidth = function() {
+    if(expandedWidth) return;
     width=parseInt(width)+20+'px';
     setWidth(width);
   }
   this.decreaseWidth = function() {
+    if(expandedWidth) return;
     if (parseInt(width)>20) width=parseInt(width)-20+'px';
     setWidth(width);
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('<') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' < ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.increaseWidth);
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('>') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' > ') );
+  buttonSpan.style.marginRight='0.2em';
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.decreaseWidth);
 
@@ -367,14 +369,14 @@ function Logger(logTitle) {
     setHeight(height);
   }
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('\\/') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' \\/ ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.increaseHeight);
   buttonSpan = document.createElement('SPAN');
-  buttonSpan.appendChild( document.createTextNode('/\\') );
-  buttonSpan.style.marginRight='1em';
+  buttonSpan.appendChild( document.createTextNode(' /\\ ') );
+  buttonSpan.style.marginRight='0.2em';
   makeUnselectable(buttonSpan);
   logHeader2.appendChild(buttonSpan);
   addEvent(buttonSpan,'click',me.decreaseHeight);

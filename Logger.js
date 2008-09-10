@@ -238,12 +238,20 @@ function Logger(logTitle) {
   }
   var storedPosition; // Place to store position.
   var storePosition = function() {
-    storedPosition={'top':logFrame.style.top,'right':logFrame.style.right}
+    storedPosition={
+      'top':logFrame.style.top,
+      'right':logFrame.style.right
+    }
   }
   var restorePosition = function() {
     if (storedPosition) {
       logFrame.style.right=storedPosition['right'];
       logFrame.style.top=storedPosition['top'];
+      // Put us back in expandedWidth mode.
+      if(expandedWidth) {
+        me.expandWidth();
+        me.expandWidth();
+      }
     }
   }
 
@@ -264,10 +272,11 @@ function Logger(logTitle) {
       logBody.style.display="";
     }
     else {
-      // Get out of expandedWidth mode.
-      if(expandedWidth) me.expandWidth();
       // Record where we were.
-      storePosition();
+      // If in expandedWidth mode, we've
+      // already done this.
+      if (!expandedWidth) storePosition();
+      else setWidth(width);
       logBody.style.display="none";
       logFrame.style.right='0px';
       logFrame.style.top='0px';

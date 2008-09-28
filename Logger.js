@@ -33,10 +33,11 @@
 
 function Logger(logTitle) {
 
-  // Wrapper function to handle non-standard IE
-  // DOM event handling.  We only handle the
-  // bubbling phase of events here.
-  // For obj.attachEvent:
+  // Add / remove event handlers.
+  //
+  // 1) Handle non-standard IE DOM event handling.  
+  // 2) We only handle the bubbling phase of events here.
+  // 3) For obj.attachEvent:
   // The pointer 'this' apparently points
   // to the 'window' object - so beware.
   // See http://ejohn.org/projects/flexible-javascript-events/
@@ -457,19 +458,17 @@ function Logger(logTitle) {
       addEvent(dragHandle,"mouseup",
         function(e){dragOff(e,draggable,canDrag);});
     }
-
-    // What is this for?
-    //document.addEventListener("click",me.dragOff,false);
-    //addEvent(document,"click",me.dragOff);
   }
 
   // Make logHeader a drag handle for dragging
   // the logFrame.
+  //
 
   var dragServer = new DragServer();
   dragServer.register(logFrame,logHeader,me.isDraggable);
 
   // Hide log body when dragging.
+  // 
   // We override the element's style attribute 
   // for display to 'none'.
   // Hiding the body may give better performance.

@@ -2,7 +2,13 @@ From: Daniel Bush
 Date: Sun Sep  7 23:14:55 EST 2008
 Subject: Logger - introduction
 
-See example.html for examples.
-
-Contact details:
+Main project contact:
   dlb.id.au (AT) gmail.com
+
+See example.html for examples.
+Logger is intended to be fairly basic, self-contained javascript object that allows other
+programs/objects to print output onto it.
+By self-contained, we mean it does not to rely on any other javascript libraries
+for its functionality.  This doesn't preclude logger from being able to integrate 
+with an environment if it is extended to do this.
+

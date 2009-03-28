@@ -7,7 +7,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-/**********************************************************************/
+
 // Logger object
 //
 // A floating div that you can use

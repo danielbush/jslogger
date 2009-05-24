@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+  <head>
+    <title>Packaging and Namespacing for Javascript Projects 0.1</title>
+    <link rel="stylesheet" type="text/css" href="style.en.css" />
+  </head>
+
+<body>
+<div>
+   <h1>Packaging and Namespacing for Javascript Projects 0.1</h1>
+   <h2>Proposal 29 March 2009</h2>
+   <div class="head" >
+    <dl>
+      <dt>This version:</dt>
+      <dd><a href="http://js.web17.com.au/specs/packaging-and-namespacing/javascript-packaging-and-namespacing-standard-0.1.xhtml" >http://js.web17.com.au/specs/packaging-and-namespacing/javascript-packaging-and-namespacing-standard-0.1.xhtml</a></dd>
+      <dt>Latest version:</dt>
+      <dd><a href="http://js.web17.com.au/specs/packaging-and-namespacing/javascript-packaging-and-namespacing-standard.xhtml" >http://js.web17.com.au/specs/packaging-and-namespacing/javascript-packaging-and-namespacing-standard.xhtml</a></dd>
+      <dt>Editors:</dt>
+      <dd>Daniel Bush  <a href="mailto:dlb.id.au@gmail.com" >dlb.id.au@gmail.com</a></dd>
+    </dl>
+    &copy; Copyright 2009 Daniel Bush
+   </div>
+   <hr/>
+   <br/>
+   <h2>Abstract</h2>
+   <p>
+    The Packaging and Namespacing for Javascript Projects Standard is a set of conventions
+    intended to allow javascript programmers to safely use javascript libraries from multiple
+    vendors in the one project and package such a project so that it too can be safely
+    used by other projects in turn.
+   </p>
+   <p>The following questions motivate this standard.</p>
+   <ul>
+    <li>
+     What is the best way to structure a javascript project?
+    </li>
+    <li>
+     How do you package it and handle versioning?
+    </li>
+    <li>
+     How do you prevent clashes in the javascript "global namespace" when using multiple
+     javascript libraries from diverse sources?
+    </li>
+    <li>
+     In short: how do you create a system of javascript libraries created
+     by multiple authors/vendors with multiple versions which other authors can
+     easily use and handle in a reliable, controlled way?
+    </li>
+   </ul>
+   <p>Other motivations:</p>
+   <ul>
+    <li>
+     <a href="http://yuiblog.com/blog/2006/06/01/global-domination/" >
+     http://yuiblog.com/blog/2006/06/01/global-domination/</a>
+    </li>
+    <li>
+     <a href="http://yuiblog.com/blog/2007/06/12/module-pattern/" >
+     http://yuiblog.com/blog/2007/06/12/module-pattern/</a>
+    </li>
+    <li>
+     <a href="http://blog.web17.com.au/2009/02/namespaces-in-javascript-1.html" >
+     http://blog.web17.com.au/2009/02/namespaces-in-javascript-1.html</a>
+    </li>
+   </ul>
+
+   <h2>Status of this Document</h2>
+   <p>
+    This draft is an initial attempt to standardise the way javascript projects
+    are written. It is likely there may be major revisions or unresolved issues.
+   </p><p>
+    Please submit comments to Daniel Bush, email: 
+    <a href="mailto:dlb.id.au@gmail.com">dlb.id.au@gmail.com</a> .
+   </p>
+
+   <h2>Table of Contents</h2>
+   <ul>
+     <li><a href="#sec-1">1. Terminology</a></li>
+     <li><a href="#sec-2">2. Conventions</a></li>
+     <li><a href="#app-A">A. Module Format</a></li>
+     <li><a href="#app-B">B. Layout of a Project</a></li>
+   </ul>
+
+   <hr/>
+   <br/>
+   
+   <a name="sec-1" ></a>
+   <h2>1 Terminology</h2>
+   <p>
+   We identify the key parts of a javascript project and related processes.
+   We highlight the key problems and issues that arise as we define these parts.
+   </p>
+   <dl>
+    <dt>
+     Publisher
+    </dt>
+    <dd>
+     A person or organisation who creates javascript code as an application or
+     as a library to be used by other javascript applications by other
+     publishers or the same publisher.
+    </dd>
+    <dt>
+     Global Namespace (GN)
+    </dt>
+    <dd>
+     <p>
+     A global variable that publishers use to contain all projects they produce.
+     A GN is a javascript object:
+     </p>
+     <pre>
+      var $GN$ = {}; 
+     </pre>
+     <p>
+     The GN might be a descriptive name representing the publisher, the publisher's
+     company or domain name.  <b>This document will make recommendations regarding
+     the format used for the GN (including the use of the dollar signs) to reduce
+     the chance of different publishers using the same GN.</b>
+     </p><p>
+     A project makes use of a GN by occupying one of the entries of the GN object.
+     </p>
+     <pre>
+      $GN$.project1 = {};
+     </pre>
+     <p>
+     The publisher has freedom to create namespaces and to structure their namespace
+     as they require.
+     </p>
+     <pre>
+      $GN$.namespace1.project1 = {};
+     </pre>
+    </dd>
+    <dt>
+     Foreign Global Namespace (FGN)
+    </dt>
+    <dd>
+     An FGN is a GN of another publisher from the point of view of a given publisher.
+     In the following, we'll often just refer to "GN" for a project regardless
+     of whether it is using another project or being used by another project.
+    </dd>
+    <dt>
+     Project
+    </dt>
+    <dd>
+     Has the following features:
+     <ul>
+      <li>
+       exists as a set of files and subdirectories under a root directory
+      </li>
+      <li>
+       unminified/unserialised; project may be spread across several files and
+       include comments and spacing for human readability as well as additional
+       files that aren't executed.
+      </li>
+      <li>
+       is version controlled using a version control system (VCS)
+      </li>
+      <li>
+       defines/creates one place in the GN of the publisher eg 
+       <pre>
+         $GN$.project1
+       </pre>
+       OR
+       <pre>
+         $GN$.area1.project1
+       </pre>
+       etc 
+      </li>
+      <li>
+       may have dependencies on other projects in the same GN or in FGN's
+      </li>
+      <li>
+       may be used as a dependency (library) or standalone
+      </li>
+      <li>
+       is intended to be packaged - see 'Package' below
+      </li>
+     </ul>
+     <p>
+     A project can be built out of other projects.
+     </p>
+    </dd>
+    <dt>
+     Dependency
+    </dt>
+    <dd>
+      A project which another project relies on for some of its functionality.
+     Dependencies are usually packaged and as a result, represent a specific
+     version or snapshot of the project. Dependencies may be sourced from the
+     same GN or an FGN.
+    </dd>
+    <dt>
+     Dependency Chain
+    </dt>
+    <dd>
+      A tree representing the dependencies of a project where the root node 
+      represents the project and level 1 represents the libraries
+      that the project depends on. Each successive level represents 
+      dependencies required by the preceding level.  Here is an example:
+     <pre>
+          B1
+         /
+      A--
+         \
+          C1--B2 
+     </pre>
+     <p>
+     In this diagram, A,B,C are projects. B1,C1,B2 are specific versions of the
+     projects B,C and B. <b>Note: Although B1 and B2 are potentially different
+     versions of the same project, they both occupy the same location of the GN
+     for that project.  The last version to be loaded will therefore occupy this
+     position in the GN once the dependency chain has been fully loaded into
+     the system.</b>
+     </p><p>
+     Level 1 of the tree represents A's dependencies (B1 and C1). The
+     dependencies of A's dependencies are called 2nd order dependencies of A and
+     occupy level 2 of the tree (B2).
+     </p><p>
+     Note: 'A' may be tagged version in a VCS or an in-between development
+     version. Either way, any given snapshot of A relies on specific versions of
+     its dependencies.
+     </p>
+    </dd>
+    <dt>
+     Load Order
+    </dt>
+    <dd>
+     <p>
+     The order in which a project and its dependencies (and their dependencies
+     etc) are loaded.  Load order can be defined recursively. A project loads
+     itself by first loading its dependencies in a specified order (see
+     packaging) and then loading itself.  Loading involves the process of
+     defining the GN if it does not exist already, and then building the
+     relevant part of the GN namespace that is defined by the project or
+     dependency. Using the dependency chain example above, the appropriate load
+     orders are:
+     </p>
+     <pre>
+      B1 B2 C1 A 
+     </pre>
+     Or:
+     <pre>
+      B2 C1 B1 A 
+     </pre>
+     <p>
+     <u>Load order is affected by the order in which the packages are referenced
+     using script tags in an html file.</u>
+     The order would look something like this:
+     </p>
+     <pre class="small" ><![CDATA[
+       <script type="text/javascript" src="/dependencies/projectB-v1.js" ></script>
+       <script type="text/javascript" src="/dependencies/projectC-v1.js" ></script>
+       <script type="text/javascript" src="/dependencies/projectA.js" ></script> ]]>
+     </pre>
+     <p>
+     Notes:
+     </p>
+     <ul>
+      <li>In practice, these files would probably be merged with project A to form one file
+     to reduce the number of http requests.</li>
+      <li>B2 (projectB-v2.js) is not show as it is part of projectC-v1.js .</li>
+     </ul>
+    </dd>
+
+    <dt>
+     Load Time
+    </dt>
+    <dd>
+     <p>
+     The time during which the project and its dependencies are loaded into the
+     interpreter. Can be thought of as the initialization phase of the project.
+     This is emphasized because it is during this phase that clashes with
+     project global variables may occur.  (Sometimes referred to as 'load order
+     time'.)
+     </p>
+    </dd>
+    <dt>
+     Package / Packaging
+    </dt>
+    <dd>
+     <p>
+     When a project is "packaged" it becomes a package.  Packages have the
+     following features:
+     </p>
+     <ul>
+      <li>
+       usually minified; comments and spacing of the original project code are
+       reduced or removed
+      </li>
+      <li>
+       usually a single file (serialised)
+      </li>
+      <li>
+       usually represent a particular tagged version of the project (usually
+       using a tag in a VCS).
+      </li>
+      <li>
+       may include dependencies
+      </li>
+      <li>
+       javascript files of the project have to be serialised in load order when
+       creating the single package file
+      </li>
+      <li>
+       The version number is explicity added to the end of the file. Eg
+       project1-0.2.js would be version 0.2 of project1.
+      </li>
+     </ul>
+    </dd>
+    <dt>
+     Module
+    </dt>
+    <dd>
+     <p>
+      A module (also referred to as the "module pattern") is a pattern
+     identified by Yahoo!. See:
+     <a href="http://yuiblog.com/blog/2007/06/12/module-pattern/"
+     >http://yuiblog.com/blog/2007/06/12/module-pattern/</a>. <b>Modules can be
+     used to construct a part of a GN or project at load time and encourage the
+     building of projects and their dependencies outside of the global namespace.</b> 
+     </p><p>
+     Key aspects of a module are
+     </p>
+     <ol>
+      <li>the module is scoped by a function</li>
+      <li>this scope is created at load time</li>
+      <li>dependencies (ie other modules from other projects) can be loaded within
+       this scope at load time via a simple local variable assignment
+       <b>allowing the publisher to ensure a specific dependency for this
+       module is not overwritten by a different version at a later point in the
+       load order.</b></li>
+     </ol>
+    </dd>
+    <dt>
+     Frameworks
+    </dt>
+    <dd>
+     <p>
+      Frameworks are large, overarching sets of projects or libraries. Examples
+     are jQuery and Prototype. Frameworks tend to use their own special GN's eg
+     jQuery uses 'jQuery'; or occupy really common GN's eg Prototype uses
+     'Event', 'Ajax' etc. 
+     </p><p>
+     Frameworks are mostly exempt from this document.
+     </p><p>
+     If you are using one, it will probably be included at the top of the load
+     order. Projects and dependencies in the rest of the load order can then use
+     the framework. It is up to the publisher to make sure they use an
+     appropriate version of the framework to fit the requirements of the project
+     and its dependencies. 
+     </p>
+    </dd>
+   </dl>
+   <a name="sec-2" ></a>
+   <h2>
+    2 Conventions
+   </h2>
+   <div>
+    <h3>
+     2.1 Referencing global variables
+    </h3>
+    <p>
+    Do NOT reference global variables in yet-to-be-executed function eg an
+    asynchronous event handler.  This includes referencing the GN or part of the
+    GN or any other global variable that is a shortcut to the GN or part of the
+    GN.
+    </p><p>
+    Global variables should be accessed at load time and preferably with a local
+    variable within the scope of a module.
+    </p><p>
+    Rationale:
+    </p><p>
+    You cannot guarantee that the same version of a project is accesible through
+    the GN after load time, because another project/dependency may have
+    overloaded it through their dependencies. For shortcuts, the situation can
+    be exacerbated; several dependencies (projects) may use the same shortcut to
+    reference completely different things. If these shortcuts are global these
+    shortcuts will get corrupted.
+    </p><p>
+    Example: 
+    <pre>
+      var project1 = $GN$.area1.project1;
+      project1.Object1 = function(){...}
+      var p = new project1.Object(); 
+    </pre>
+     In this example, 'project1' is a global variable shortcut to a GN which is
+    set up and then used straight away. Note: the above example should not be
+    used for projects which are likely to be used as dependencies themselves as
+    it is polluting the global namespace. See next point.
+    </p><p>
+    Example - bad: 
+    <pre>
+      var project1 = $GN$.area1.project1;
+      function doSomethingLater() {
+      ...
+      var obj = new project1.Object1();
+      ...
+      } 
+    </pre>
+    </p><p>
+    In this example, the 'doSomethingLater' function is not executed but
+    references a global shortcut 'project1'. In an environment that has multiple
+    dependencies from multiple authors, the 'project1' could be overwritten by
+    another dependency at load time and is not guaranteed to be correct. Even if
+    we don't use a shortcut, it is possible that $GN$.area1.project1 has been
+    overwritten with a different version.
+    </p>
+   </div>
+   <div>
+    <h3>
+     2.2 Using modules to build the GN and to reference other GN's
+    </h3>
+    <p>
+    If your project is intended or likely to be used as a dependency (a library
+    to some other project), then i) it should be constructed using a module (at
+    load time) and ii) the GN's of its dependencies should be referenced inside
+    this module. Shortcuts to such GN's should be created within the scope of
+    the module at or near the top.
+    </p><p>
+    Rationale:
+    </p><p>
+    A dependency which has other dependencies, will reference them in its module
+    that builds that dependency at load time thus ensuring that the dependency
+    has kept a reference to the appropriate version .
+    </p><p>
+    Example:
+    <pre>
+     $GN1$.project1 = function() {
+      ...
+      var project2 = $GN2$.area1.project2;
+      ...
+      ...
+      ...
+     }(); 
+    </pre>
+    </p><p>
+    In this example, project2 is a dependency of project1 and is referenced
+    within the executed scope of the anonymous function. Assuming load order and
+    packaging have been set up properly, this should ensure that project1 is
+    using the appropriate version of project2.
+    </p><p>
+    Note: Use of this technique within the context of the load order may
+    mitigate any clashes in the GN; but it still makes sense to keep GN's unique
+    to clearly distinguish publishers.
+    </p>
+   </div>
+   <div>
+    <h3>
+     2.3 GN naming scheme
+    </h3>
+    <p>
+    Use double dollar sign to denote a GN. The string between the dollar signs
+    should represent a domain name of the publisher with the dots replaced by
+    underscores. eg $web17_com_au$ would represent the GN for the publisher who
+    owns the web17.com.au domain name.
+    </p><p>
+    Rationale:
+    </p><p>
+    If there are a proliferation of publishers creating javascript projects and
+    libraries that can be used by other publishers, the likelihood of the same
+    GN being used by different publishers increases; a modified domain name will
+    reduce this risk. 
+    </p><p>
+    The dollar signs signify that the variable is a GN and is part of the
+    packaging system rather than just another variable in a program. 
+    </p><p>
+    It also encourages the use of shortcuts. The GN should not be interspersed
+    throughout the code in the project. It should be referenced by a shortcut at
+    the top of a module or project.
+    </p>
+    <h4>
+     2.3.1 Starting a GN
+    </h4>
+    <p>
+    To start a GN, do:
+    </p>
+    <pre>
+     var $GN$ = $GN$ || {}; 
+    </pre>
+    <p>
+    This statement should be outside of any function. You do not create FGN's. By
+    definition, they have been created for you by the dependency.
+    </p>
+   </div>
+
+   <a name="app-A" ></a>
+   <h2>
+    A. Module Format
+   </h2>
+   <p>
+   A suggested module pattern is shown below.
+   $GN$ and 'project1' are used to represent and example GN and project
+   respectively.  
+   </p>
+   <pre>
+    $GN$.project1 = function() {
+     var module={};
+     var shortcut1 = $FGN1$.path.to.project.Object1;
+     var shortcut2 = $FGN2$.path.to.project2;
+     ...
+     // Private module members.
+     var private_var1 = ...;
+     ...
+     // Public module members.
+     module.Object1 = function(...) {...}
+     module.function1 = function(...) {...}
+     ...
+     // Return 'module' to build $GN$.project1 namespace.
+     return module;
+    }(); 
+    </pre>
+    <p>
+    Notes:
+    </p>
+    <ul>
+     <li>
+       We create a local object called 'module' which we return at the end of 
+       the module scope.  This object contains the publicly accessible parts of
+       the module.
+     </li>
+     <li>
+       We reference 2 FGN's by assigning them to shortcut variables 'shortcut1' and
+       'shortcut2'.  Even if the FGN is reloaded with a different version of a project
+       later in the load order, we will still hold references to the originals.
+     </li>
+     <li>
+       Don't forget to execute the module as shown on the last line.
+     </li>
+    </ul>
+   <h3>
+    A.1 Extending modules - submodules
+   </h3>
+   Suppose you have built the module in point 2). You can extend the module
+   (maybe in a separate file) likeso:
+   <pre>
+    $GN$.project1.area1 = function() {
+     ...
+    }(); 
+    </pre>
+   Notes:
+   <ul>
+    <li>
+     this file would need to come after the first file defining $GN$.project1 at
+     load time
+    </li>
+    <li>
+     A new module is being created at project1.area1 - ie a submodule; this
+     module clearly cannot see any private data in the parent module.
+    </li>
+    <li>
+     care needs to be taken that area1 doesn't overwrite a namesake defined in
+     the project1 module1.
+    </li>
+   </ul>
+   <pre>
+    $GN$.project1 = function() {
+     ...
+    }
+    $GN$.project1.Object2 = function() {
+     var shortcut1 = $FGN1$.project2; // Not so good.
+     ...
+    } 
+   </pre>
+   In this example, the project1 module is augmented with a new object not a
+   submodule.  An attempt is made to create a shortcut within Object2.
+   Unfortunately, this object can be instantiated at a later time when
+   $FGN1$.project2 might have been overwritten with a different version.
+   Granted, this is probably not that likely.
+   <br/>
+   <a name="app-B" ></a>
+   <h2>
+    B. Layout of project
+   </h2>
+   The following might represent the file structure for a project on a file system:
+   <pre>
+    /
+    /ext
+    /ext/projectA-0.2.js
+    /ext/projectB-1.1.2.js
+    /globals.js
+    ...
+    /module1
+    /module1/module1.js
+    /module1/submodule1.js
+    /module1/submodule2.js
+    ...
+    /module2/module2.js
+    ...  
+   </pre>
+   <ul>
+    <li>
+     The above layout uses a directory called 'ext' to store dependencies - ie
+     other projects are used by this project.
+    </li>
+    <li>
+     The dependencies are packaged with their version numbers displayed so it
+     obvious to the maintainer.
+    </li>
+    <li>
+     The globals.js file sets up the $GN$ for the project including the relevant
+     part of the $GN$ which this project will handle. Eg 
+     <pre>
+      var $GN$ = $GN$ || {};
+      $GN$.module1={}; // Initialize the module for this project.  
+     </pre>
+    </li>
+    <li>
+     A large project might create several modules and submodules; it may make
+     sense to provide a subdirectory for each module and its submodules.
+    </li>
+   </ul>
+</div>
+<hr/>
+<br/>
+<br/>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/au/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/2.5/au/88x31.png" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Packaging and Namespacing for Javascript Projects</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://js.web17.com.au/specs/packaging-and-namespacing/javascript-packaging-and-namespacing-standard.xhtml" property="cc:attributionName" rel="cc:attributionURL">Daniel Bush</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/au/">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.
+</body>
+</html>

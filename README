@@ -1,4 +1,5 @@
 From: Daniel Bush
+Updated: Sun May 24 22:08:20 EST 2009
 Date: Sun Sep  7 23:14:55 EST 2008
 Subject: Logger - introduction
 
@@ -6,9 +7,11 @@ Main project contact:
   dlb.id.au (AT) gmail.com
 
 See example.html for examples.
-Logger is intended to be fairly basic, self-contained javascript object that allows other
-programs/objects to print output onto it.
-By self-contained, we mean it does not to rely on any other javascript libraries
-for its functionality.  This doesn't preclude logger from being able to integrate 
-with an environment if it is extended to do this.
+Logger is intended to be fairly basic, self-contained javascript object that
+allows other programs/objects to print output onto it.
+By being self-contained, Logger does not have to rely on any other javascript
+libraries for its functionality.
 
+Logger uses the packaging and namespacing standard specified in README.modules.html.
+The latest version can be found at:
+http://js.web17.com.au/specs/packaging-and-namespacing/index.xhtml .

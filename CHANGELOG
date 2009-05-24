@@ -3,7 +3,7 @@ DB - Daniel Bush
 v1.0 [not released]
 Aim: tested in all major relevant desktop browsers.
 
-v0.3 [not released]
+v0.4 [not released]
 Aims: 
   1) Logger becomes a frame holding multiple log sessions.
      Logs can be accessed on the log header.
@@ -13,6 +13,9 @@ Aims:
   2) Log entries can be sorted both normal and reverse
      order; default is reverse order (last entry at the
      top).
+
+v0.3
+* Logger is modularised. [DB]
 
 v0.2 - 11-Sep-08
 * Logger opens in top right corner of the screen. [DB] 8-Sep-08. 

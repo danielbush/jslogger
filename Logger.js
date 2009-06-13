@@ -42,12 +42,31 @@ $web17_com_au$.logger = function() {
   // Logger instances require that the body-tag be
   // already loaded by the browser.
 
-  module.Logger = function(logTitle) {
-
+  module.Logger = function(logTitle,options) {
 
     var title=logTitle;
 
     var me=this;
+
+    // init()
+    // Called at the end - see below.
+    //
+    // TODO: move all free-standing code into here
+    // and define private variables near the top.
+
+    function init() {
+      processOptions(options);
+    }
+
+    // Process options passed into Logger at
+    // instantiation time.
+
+    function processOptions(options) {
+      if(!options) return;
+      if(options.minimized) {
+        me.minimize();
+      }
+    }
 
     // Throw error and alert user if body-tag not loaded yet.
 
@@ -197,7 +216,7 @@ $web17_com_au$.logger = function() {
       }
     }
 
-    var buttonSpan;
+    var buttonSpan,minimizeButton;
 
     // Minimization
     //
@@ -207,19 +226,21 @@ $web17_com_au$.logger = function() {
     this.minimize = function() {
       if(minimized) {
         minimized=false;
+        minimizeButton.innerHTML = ' minimize ';
         logBody.style.display="";
       }
       else {
         logBody.style.display="none";
+        minimizeButton.innerHTML = ' maximize ';
         minimized=true;
       }
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' minimize ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.minimize);
+    minimizeButton = document.createElement('SPAN');
+    minimizeButton.appendChild( document.createTextNode(' minimize ') );
+    minimizeButton.style.marginRight='0.2em';
+    makeUnselectable(minimizeButton);
+    logHeader2.appendChild(minimizeButton);
+    module.addEvent(minimizeButton,'click',me.minimize);
 
     // Wrapping
     //
@@ -453,8 +474,10 @@ $web17_com_au$.logger = function() {
       }
     );
 
+    init();
+
     return this;
-  }
+  } // Logger
 
   // Add / remove event handlers.
   //

@@ -77,6 +77,7 @@ $web17_com_au$.logger = function() {
     var tbody = document.createElement("tbody");
 
 
+    logFrame.style.color='black';
     logFrame.style.right='0px';
     logFrame.style.top='0px';
     logFrame.style.visibility='visible';

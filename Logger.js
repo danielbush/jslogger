@@ -75,33 +75,6 @@ $web17_com_au$.logger = function() {
     // init()
     // Called at the end - see below.
 
-    logFrame.style.color='black';
-    logFrame.style.right='0px';
-    logFrame.style.top='0px';
-    logFrame.style.visibility='visible';
-    logFrame.style.position='absolute';
-    logFrame.style.border='solid black 1px';
-    logFrame.style.backgroundColor='white';
-    logFrame.setAttribute("id",ID);
-
-    logHeader.style.backgroundColor="black";
-    logHeader.style.color="white";
-    logHeader.style.fontFamily="sans-serif";
-    logHeader.style.fontWeight="bold";
-    logHeader.style.fontSize="9pt";
-    logHeader.style.paddingBottom="1px";
-    logHeader.style.cursor="move";
-    logHeader.style.paddingLeft="0.5em";
-
-    logHeader2.style.backgroundColor="#333";
-    logHeader2.style.color="white";
-    logHeader2.style.fontFamily="sans-serif";
-    logHeader2.style.fontSize="7pt";
-    logHeader2.style.paddingBottom="1px";
-    logHeader2.style.paddingRight="1em";
-    logHeader2.style.cursor="pointer";
-    logHeader2.style.textAlign="right";
-
     function init() {
 
       // Throw error and alert user if body-tag not loaded yet.
@@ -117,6 +90,7 @@ $web17_com_au$.logger = function() {
       while ( document.getElementById("Logger"+n) ) n++;
       ID = 'Logger'+n;
 
+      logFrame.style.color='black';
       logFrame.style.right='0px';
       logFrame.style.top='0px';
       logFrame.style.visibility='visible';

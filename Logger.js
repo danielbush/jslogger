@@ -42,40 +42,38 @@ $web17_com_au$.logger = function() {
   // Logger instances require that the body-tag be
   // already loaded by the browser.
 
-  module.Logger = function(logTitle) {
-
+  module.Logger = function(logTitle,options) {
 
     var title=logTitle;
 
     var me=this;
 
-    // Throw error and alert user if body-tag not loaded yet.
-
     var body;
-    body=document.getElementsByTagName("BODY")[0];
-    if (!body) {
-      alert("E1: "+ErrorMessages['E1']);
-      throw new Error("E1: "+ErrorMessages['E1']);
-    }
-
-    // Set ID according to how many loggers are on the
-    // page already.
-
-    var n=0;
-    while ( document.getElementById("Logger"+n) ) n++;
-    var ID = 'Logger'+n;
-
+    var n=0,id;
     // logFrame: the div containing logger.
-    // logHeader: a bit like the title bar at the top.
+    // logHeader: title bar at the top.
+    // logHeader2: menu bar near top
     // logTable: log entries are rows in the table.
-
     var logFrame = document.createElement("div");
     var logHeader2 = document.createElement("div");
     var logHeader = document.createElement("div");
     var logBody = document.createElement("div");
     var logTable = document.createElement("table");
     var tbody = document.createElement("tbody");
+    var width='250px';
+    var height='500px';
+    var zindex=1000;
+    var logEntry=1;
+    var agt=navigator.userAgent.toLowerCase();
+    var storedPosition; // Place to store position.
+    var buttonSpan,minimizeButton;
+    var minimized=false; // Put us in unminimized mode.
+    var wrapped=false;   // Put us in wrapped mode.
+    var expandedWidth=false;  // Width is not expanded to fit screen.
+    var dragServer = new DragServer();
 
+    // init()
+    // Called at the end - see below.
 
     logFrame.style.color='black';
     logFrame.style.right='0px';
@@ -104,6 +102,189 @@ $web17_com_au$.logger = function() {
     logHeader2.style.cursor="pointer";
     logHeader2.style.textAlign="right";
 
+    function init() {
+
+      // Throw error and alert user if body-tag not loaded yet.
+      body=document.getElementsByTagName("BODY")[0];
+      if (!body) {
+        alert("E1: "+ErrorMessages['E1']);
+        throw new Error("E1: "+ErrorMessages['E1']);
+      }
+
+      // Set ID according to how many loggers are on the
+      // page already.
+
+      while ( document.getElementById("Logger"+n) ) n++;
+      ID = 'Logger'+n;
+
+      logFrame.style.right='0px';
+      logFrame.style.top='0px';
+      logFrame.style.visibility='visible';
+      logFrame.style.position='absolute';
+      logFrame.style.border='solid black 1px';
+      logFrame.style.backgroundColor='white';
+      logFrame.setAttribute("id",ID);
+
+      logHeader.style.backgroundColor="black";
+      logHeader.style.color="white";
+      logHeader.style.fontFamily="sans-serif";
+      logHeader.style.fontWeight="bold";
+      logHeader.style.fontSize="9pt";
+      logHeader.style.paddingBottom="1px";
+      logHeader.style.cursor="move";
+      logHeader.style.paddingLeft="0.5em";
+
+      logHeader2.style.backgroundColor="#333";
+      logHeader2.style.color="white";
+      logHeader2.style.fontFamily="sans-serif";
+      logHeader2.style.fontSize="7pt";
+      logHeader2.style.paddingBottom="1px";
+      logHeader2.style.paddingRight="1em";
+      logHeader2.style.cursor="pointer";
+      logHeader2.style.textAlign="right";
+
+      makeUnselectable(logHeader);
+      makeUnselectable(logHeader2);
+
+      // Width, height, zindex
+      //
+      // We must set the width of logBody in order
+      // for the scroll setting to work.  Otherwise
+      // ie6 will just expand logBody.
+
+      logFrame.style.width=width;
+      logBody.style.width=width;
+      logBody.style.overflow='scroll';
+      logBody.style.height=height;
+      logFrame.style.zIndex=zindex;
+
+      // Assemble Logger's html...
+
+      logHeader.appendChild(document.createTextNode("log: "+title));
+      logTable.appendChild(tbody);
+      logBody.appendChild(logTable);
+      logFrame.appendChild(logHeader);
+      logFrame.appendChild(logHeader2);
+      logFrame.appendChild(logBody);
+      body.appendChild(logFrame);
+
+      // IE 7 and up generally handle position fixed.
+
+      if ( agt.indexOf("msie 6.")==-1 && agt.indexOf("msie 5.")==-1 ) {
+        logFrame.style.position='fixed';
+        //me.log('Using fixed positioning.');
+      } else {
+        //me.log('Using absolute positioning.');
+      }
+
+      // Minimization
+
+      minimizeButton = document.createElement('SPAN');
+      minimizeButton.appendChild( document.createTextNode(' minimize ') );
+      minimizeButton.style.marginRight='0.2em';
+      makeUnselectable(minimizeButton);
+      logHeader2.appendChild(minimizeButton);
+      module.addEvent(minimizeButton,'click',me.minimize);
+
+      // Wrapping
+
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' wrap ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.wrap);
+      me.wrap();
+
+      // Width expansion
+
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' 100% ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.expandWidth);
+
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' < ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.increaseWidth);
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' > ') );
+      buttonSpan.style.marginRight='0.2em';
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.decreaseWidth);
+
+      // Height expansion
+
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' \\/ ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.increaseHeight);
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' /\\ ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.decreaseHeight);
+
+      // Snapping
+
+      buttonSpan = document.createElement('SPAN');
+      buttonSpan.appendChild( document.createTextNode(' snap ') );
+      buttonSpan.style.marginRight='0.2em';
+      makeUnselectable(buttonSpan);
+      logHeader2.appendChild(buttonSpan);
+      module.addEvent(buttonSpan,'click',me.snap);
+
+      buttonSpan=null;
+
+      // Make logHeader a drag handle for dragging
+      // the logFrame.
+
+      dragServer.register(logFrame,logHeader,me.isDraggable);
+
+      // Hide log body when dragging.
+      // 
+      // We override the element's style attribute 
+      // for display to 'none'.
+      // Hiding the body may give better performance.
+
+      module.addEvent(logHeader,"mousedown",
+        function() { 
+          if(!me.isDraggable()) return;
+          if(!minimized) me.minimize();
+        }
+      );
+      module.addEvent(logHeader,"mouseup",
+        function() { 
+          if(!me.isDraggable()) return;
+          if(minimized) me.minimize();
+        }
+      );
+
+      // Process any options passed in by user.
+
+      processOptions(options);
+
+    } // Init()
+
+    // Process options passed into Logger at
+    // instantiation time.
+    //
+    // Should be run at the end of init().
+
+    function processOptions(options) {
+      if(!options) return;
+      if(options.minimized) {
+        me.minimize();
+      }
+    }
+
     // Disable text selection when using logHeader as a drag
     // handle.
 
@@ -111,37 +292,6 @@ $web17_com_au$.logger = function() {
       el.style.MozUserSelect="none";  // Firefox.
       el.unselectable="on"; // IE ???
     }
-    makeUnselectable(logHeader);
-    makeUnselectable(logHeader2);
-
-
-    // Width, height, zindex
-    //
-    // We must set the width of logBody in order
-    // for the scroll setting to work.  Otherwise
-    // ie6 will just expand logBody.
-
-    var width='250px';
-    logFrame.style.width=width;
-    logBody.style.width=width;
-    logBody.style.overflow='scroll';
-    var height='500px';
-    logBody.style.height=height;
-    var zindex=1000;
-    logFrame.style.zIndex=zindex;
-
-
-    logHeader.appendChild(document.createTextNode("log: "+title));
-    logTable.appendChild(tbody);
-    logBody.appendChild(logTable);
-    logFrame.appendChild(logHeader);
-    logFrame.appendChild(logHeader2);
-    logFrame.appendChild(logBody);
-    body.appendChild(logFrame);
-
-
-
-    var logEntry=1;
 
     // Log messages.
 
@@ -156,16 +306,6 @@ $web17_com_au$.logger = function() {
       //tbody.appendChild(tr);
       tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
       logEntry++;
-    }
-
-    // IE 7 and up generally handle position fixed.
-
-    var agt=navigator.userAgent.toLowerCase();
-    if ( agt.indexOf("msie 6.")==-1 && agt.indexOf("msie 5.")==-1 ) {
-      logFrame.style.position='fixed';
-      //me.log('Using fixed positioning.');
-    } else {
-      //me.log('Using absolute positioning.');
     }
 
 
@@ -184,7 +324,6 @@ $web17_com_au$.logger = function() {
     var setHeight = function(h) {
       logBody.style.height=h;
     }
-    var storedPosition; // Place to store position.
     var storePosition = function() {
       storedPosition={
         'top':logFrame.style.top,
@@ -198,29 +337,23 @@ $web17_com_au$.logger = function() {
       }
     }
 
-    var buttonSpan;
 
     // Minimization
     //
     // minimize(): toggle hiding of logBody.
 
-    var minimized=false;
     this.minimize = function() {
       if(minimized) {
         minimized=false;
+        minimizeButton.innerHTML = ' minimize ';
         logBody.style.display="";
       }
       else {
         logBody.style.display="none";
+        minimizeButton.innerHTML = ' maximize ';
         minimized=true;
       }
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' minimize ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.minimize);
 
     // Wrapping
     //
@@ -245,15 +378,6 @@ $web17_com_au$.logger = function() {
       wrapped=!wrapped;
       me.wrap();
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' wrap ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.wrap);
-    // By default, put us in wrapped mode.
-    var wrapped=false;
-    this.wrap();
 
 
     // Width expansion
@@ -262,7 +386,6 @@ $web17_com_au$.logger = function() {
     //   When expanding, move logger to the top right corner.
     //   When unexpanding, restore the position we were in.
 
-    var expandedWidth=false;
     this.expandWidth = function() {
       if(expandedWidth) {
         expandedWidth=false;  // Must call before setWidth.
@@ -276,12 +399,6 @@ $web17_com_au$.logger = function() {
         setWidth('100%');
       }
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' 100% ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.expandWidth);
     this.increaseWidth = function() {
       if(expandedWidth) return;
       width=parseInt(width)+20+'px';
@@ -292,17 +409,6 @@ $web17_com_au$.logger = function() {
       if (parseInt(width)>20) width=parseInt(width)-20+'px';
       setWidth(width);
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' < ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.increaseWidth);
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' > ') );
-    buttonSpan.style.marginRight='0.2em';
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.decreaseWidth);
 
     // Height expansion
 
@@ -314,18 +420,6 @@ $web17_com_au$.logger = function() {
       if (parseInt(height)>30) height=parseInt(height)-30+'px';
       setHeight(height);
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' \\/ ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.increaseHeight);
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' /\\ ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.decreaseHeight);
 
 
     // Snap
@@ -337,14 +431,6 @@ $web17_com_au$.logger = function() {
       logFrame.style.top='0px';
       storePosition();
     }
-    buttonSpan = document.createElement('SPAN');
-    buttonSpan.appendChild( document.createTextNode(' snap ') );
-    buttonSpan.style.marginRight='0.2em';
-    makeUnselectable(buttonSpan);
-    logHeader2.appendChild(buttonSpan);
-    module.addEvent(buttonSpan,'click',me.snap);
-
-    buttonSpan=null;
 
     // DragServer (DS)
     //
@@ -428,34 +514,11 @@ $web17_com_au$.logger = function() {
       }
     }
 
-    // Make logHeader a drag handle for dragging
-    // the logFrame.
-    //
-
-    var dragServer = new DragServer();
-    dragServer.register(logFrame,logHeader,me.isDraggable);
-
-    // Hide log body when dragging.
-    // 
-    // We override the element's style attribute 
-    // for display to 'none'.
-    // Hiding the body may give better performance.
-
-    module.addEvent(logHeader,"mousedown",
-      function() { 
-        if(!me.isDraggable()) return;
-        if(!minimized) me.minimize();
-      }
-    );
-    module.addEvent(logHeader,"mouseup",
-      function() { 
-        if(!me.isDraggable()) return;
-        if(minimized) me.minimize();
-      }
-    );
+    init();
 
     return this;
-  }
+
+  } // Logger
 
   // Add / remove event handlers.
   //

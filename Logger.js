@@ -78,7 +78,14 @@ $web17_com_au$.logger = function() {
     function init() {
 
       // Throw error and alert user if body-tag not loaded yet.
-      body=document.getElementsByTagName("BODY")[0];
+
+      //body=document.getElementsByTagName("body")[0];
+        // We need to use lowercase for getElementsByTagName when
+        // dealing with xml (xhtml etc).  I can't check if this
+        // applies to IE at the moment so I will use document.body
+        // which will work regardless.
+      body=document.body;
+
       if (!body) {
         alert("E1: "+ErrorMessages['E1']);
         throw new Error("E1: "+ErrorMessages['E1']);
@@ -442,7 +449,11 @@ $web17_com_au$.logger = function() {
 
     function DragServer() { 
       var me=this;
-      var body = document.getElementsByTagName("BODY")[0];
+
+      //var body = document.getElementsByTagName("body")[0];
+        // See not above regarding this invocation.
+      var body = document.body;
+
       var mouseX,objX;
       var mouseY,objY;
 

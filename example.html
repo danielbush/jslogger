@@ -26,16 +26,17 @@
         <script type="text/javascript" >
 
           var Logger = $web17_com_au$.logger.Logger; 
+          var logger;
 
           function init() {
-            L=new Logger('Logger example1',{minimized:true});
-            //L.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-            L.log('this is a very long sentence composed of average sized words because im interested to see how it looks in logger when I view it');
-            L.log('window.innerHeight: '+window.innerHeight);
-            L.log('document.body.clientHeight: '+document.body.clientHeight);
-            L.log('document.body.offsetHeight: '+document.body.offsetHeight);
-            L.log('document.documentElement.offsetHeight: '+document.documentElement.offsetHeight);
-            L.log('document.documentElement.clientHeight: '+document.documentElement.clientHeight);
+            logger=new Logger('Logger example1',{minimized:true});
+            //logger.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+            logger.log('this is a very long sentence composed of average sized words because im interested to see how it looks in logger when I view it');
+            logger.log('window.innerHeight: '+window.innerHeight);
+            logger.log('document.body.clientHeight: '+document.body.clientHeight);
+            logger.log('document.body.offsetHeight: '+document.body.offsetHeight);
+            logger.log('document.documentElement.offsetHeight: '+document.documentElement.offsetHeight);
+            logger.log('document.documentElement.clientHeight: '+document.documentElement.clientHeight);
           }
         </script>
 
@@ -51,7 +52,7 @@
 <body onload="init();" >
         <title>Logger usage - simple example</title>
      <input type="button" 
-            onclick="L.log('This is a log entry.');"
+            onclick="logger.log('This is a log entry.');"
             value="Create log entry" />
   <br/>
   <br/>

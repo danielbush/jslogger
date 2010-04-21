@@ -14,6 +14,9 @@ Aims:
      order; default is reverse order (last entry at the
      top).
 
+v0.3.1
+* Added build file. [DB]
+
 v0.3
 * Logger is modularised. [DB]
 

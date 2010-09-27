@@ -18,6 +18,8 @@ The latest version can be found at:
 
 dlb.id.au (AT) gmail.com
 
+--
 Daniel Bush
+
 Mon Sep 27 12:47:13 EST 2010
 

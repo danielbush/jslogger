@@ -1,6 +1,6 @@
 /* 
  * This file is part of Logger, a javascript-based logger.
- * Copyright (C) 2009 Daniel Bush
+ * Copyright (C) 2008-2010 Daniel Bush
  * This program is distributed under the terms of the GNU
  * General Public License.  A copy of the license should be
  * enclosed with this project in the file LICENSE.  If not
@@ -43,12 +43,15 @@ $web17_com_au$.logger = function() {
   // already loaded by the browser.
 
   module.Logger = function(logTitle,options) {
-
     var title=logTitle;
 
     var me=this;
 
-    var body;
+    var READY = false;
+      // Flag to indicate when logger can display itself.
+      // This is currently defined as when document.body is available.
+
+    var body = document.createDocumentFragment();
     var n=0,id;
     // logFrame: the div containing logger.
     // logHeader: title bar at the top.
@@ -72,24 +75,45 @@ $web17_com_au$.logger = function() {
     var expandedWidth=false;  // Width is not expanded to fit screen.
     var dragServer = new DragServer();
 
-    // init()
-    // Called at the end - see below.
 
-    function init() {
-
-      // Throw error and alert user if body-tag not loaded yet.
-
+    var ready_or_fail = function() {
       //body=document.getElementsByTagName("body")[0];
         // We need to use lowercase for getElementsByTagName when
         // dealing with xml (xhtml etc).  I can't check if this
         // applies to IE at the moment so I will use document.body
         // which will work regardless.
       body=document.body;
-
       if (!body) {
         alert("E1: "+ErrorMessages['E1']);
         throw new Error("E1: "+ErrorMessages['E1']);
       }
+    }
+
+    var ready_or_wait = function() {
+        var id;
+        var check_body = function() {
+            logger.log('...checking...');
+            if(document.body) {
+                document.body.appendChild(body);
+                body = document.body;
+                READY=true;
+                window.clearInterval(id);
+            }
+        }
+        id = window.setInterval(check_body,100);
+    }
+
+    // init()
+    // Called at the end - see below.
+
+    function init() {
+
+      // Throw error and alert user if body-tag not loaded yet.
+      //ready_or_fail();
+
+      // Keep checking if document.body is available.
+      // If it is, we swap over.
+      ready_or_wait();
 
       // Set ID according to how many loggers are on the
       // page already.

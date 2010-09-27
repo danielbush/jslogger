@@ -14,7 +14,7 @@
 -->
 
 <head>
-        <title>Logger usage - simple example</title>
+        <title>Logger usage - deferred example</title>
         <meta http-equiv="content-type" 
               content="text/html;charset=utf-8" />
         <meta http-equiv="Content-Style-Type"
@@ -26,17 +26,12 @@
         <script type="text/javascript" >
 
           var Logger = $web17_com_au$.logger.Logger; 
-          var logger;
+          logger=new Logger('Logger example1',{minimized:false});
+          logger.log('howdy!');
+          logger.log('oh dear, document.body is '+document.body);
 
           function init() {
-            logger=new Logger('Logger example1',{minimized:false});
-            //logger.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-            logger.log('this is a very long sentence composed of average sized words because im interested to see how it looks in logger when I view it');
-            logger.log('window.innerHeight: '+window.innerHeight);
-            logger.log('document.body.clientHeight: '+document.body.clientHeight);
-            logger.log('document.body.offsetHeight: '+document.body.offsetHeight);
-            logger.log('document.documentElement.offsetHeight: '+document.documentElement.offsetHeight);
-            logger.log('document.documentElement.clientHeight: '+document.documentElement.clientHeight);
+              logger.log('oh dear, document.body is now '+document.body);
           }
         </script>
 
@@ -50,9 +45,11 @@
 </head>
 
 <body onload="init();" >
-  <h1>Logger usage - simple example</h1>
-  <input type="button" 
-         onclick="logger.log('This is a log entry.');"
-         value="Create log entry" />
+        <h1>Logger usage - deferred example</h1>
+        <p>This example shows that we can start using logger
+           before the html document has loaded.</p>
+           <input type="button" 
+                  onclick="logger.log('This is a log entry.');"
+                  value="Create log entry" />
 </body>
 </html>

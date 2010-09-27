@@ -92,7 +92,7 @@ $web17_com_au$.logger = function() {
     var ready_or_wait = function() {
         var id;
         var check_body = function() {
-            logger.log('...checking...');
+            logger.log('checking for body...');
             if(document.body) {
                 document.body.appendChild(body);
                 body = document.body;
@@ -285,9 +285,10 @@ $web17_com_au$.logger = function() {
 
     function processOptions(options) {
       if(!options) return;
-      if(options.minimized) {
-        me.minimize();
-      }
+      options.minimized && me.minimize();
+      options.width && me.setWidth(options.width);
+      options.height && me.setHeight(options.height);
+      options.wrap && me.wrap();
     }
 
     // Disable text selection when using logHeader as a drag
@@ -321,20 +322,22 @@ $web17_com_au$.logger = function() {
     // storePosition(): record our coordinates
     // restorePosition(): move us to storedPosition.
 
-    var setWidth = function(w) {
+    me.setWidth = function(w) {
       logFrame.style.width=w;
       logBody.style.width=w;
       me.repeatWrap();
     }
-    var setHeight = function(h) {
+    me.setHeight = function(h) {
       logBody.style.height=h;
     }
+
     var storePosition = function() {
       storedPosition={
         'top':logFrame.style.top,
         'right':logFrame.style.right
       }
     }
+
     var restorePosition = function() {
       if (storedPosition) {
         logFrame.style.right=storedPosition['right'];
@@ -379,6 +382,7 @@ $web17_com_au$.logger = function() {
       }
       wrapped=!wrapped;
     }
+
     this.repeatWrap = function() {
       wrapped=!wrapped;
       me.wrap();
@@ -394,36 +398,36 @@ $web17_com_au$.logger = function() {
     this.expandWidth = function() {
       if(expandedWidth) {
         expandedWidth=false;  // Must call before setWidth.
-        setWidth(width);
+        me.setWidth(width);
         restorePosition();
       } else {
         storePosition();
         logFrame.style.right='0px';
         logFrame.style.top='0px';
         expandedWidth=true;
-        setWidth('100%');
+        me.setWidth('100%');
       }
     }
     this.increaseWidth = function() {
       if(expandedWidth) return;
       width=parseInt(width)+20+'px';
-      setWidth(width);
+      me.setWidth(width);
     }
     this.decreaseWidth = function() {
       if(expandedWidth) return;
       if (parseInt(width)>20) width=parseInt(width)-20+'px';
-      setWidth(width);
+      me.setWidth(width);
     }
 
     // Height expansion
 
     this.increaseHeight = function() {
       height=parseInt(height)+30+'px';
-      setHeight(height);
+      me.setHeight(height);
     }
     this.decreaseHeight = function() {
       if (parseInt(height)>30) height=parseInt(height)-30+'px';
-      setHeight(height);
+      me.setHeight(height);
     }
 
 

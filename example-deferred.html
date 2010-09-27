@@ -26,12 +26,16 @@
         <script type="text/javascript" >
 
           var Logger = $web17_com_au$.logger.Logger; 
-          logger=new Logger('Logger example1',{minimized:false});
+          logger=new Logger('Logger example1',
+                            {minimized:false,
+                             width:'500px',
+                             height:'100px',
+                             wrap:true});
           logger.log('howdy!');
           logger.log('oh dear, document.body is '+document.body);
 
           function init() {
-              logger.log('oh dear, document.body is now '+document.body);
+              logger.log('document.body is now '+document.body);
           }
         </script>
 

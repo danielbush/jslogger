@@ -64,6 +64,7 @@ $web17_com_au$.logger = function() {
     var logTable = document.createElement("table");
     var tbody = document.createElement("tbody");
     var width='250px';
+    var store_width=width;  // used by expandWidth()
     var height='500px';
     var zindex=1000;
     var logEntry=1;
@@ -91,16 +92,23 @@ $web17_com_au$.logger = function() {
 
     var ready_or_wait = function() {
         var id;
+        var tries=0;
+        var interval=100;
+        var fail_after=10000; //ms
         var check_body = function() {
-            logger.log('checking for body...');
+            me.log('checking for body...');
             if(document.body) {
                 document.body.appendChild(body);
                 body = document.body;
                 READY=true;
                 window.clearInterval(id);
             }
+            if(interval*tries>fail_after) {
+                window.clearInterval(id);
+            }
+            tries++;
         }
-        id = window.setInterval(check_body,100);
+        id = window.setInterval(check_body,interval);
     }
 
     // init()
@@ -325,10 +333,12 @@ $web17_com_au$.logger = function() {
     me.setWidth = function(w) {
       logFrame.style.width=w;
       logBody.style.width=w;
+      width=w;
       me.repeatWrap();
     }
     me.setHeight = function(h) {
       logBody.style.height=h;
+      height=h;
     }
 
     var storePosition = function() {
@@ -398,13 +408,14 @@ $web17_com_au$.logger = function() {
     this.expandWidth = function() {
       if(expandedWidth) {
         expandedWidth=false;  // Must call before setWidth.
-        me.setWidth(width);
+        me.setWidth(store_width);
         restorePosition();
       } else {
         storePosition();
         logFrame.style.right='0px';
         logFrame.style.top='0px';
         expandedWidth=true;
+        store_width = width;
         me.setWidth('100%');
       }
     }

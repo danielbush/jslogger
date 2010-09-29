@@ -93,7 +93,7 @@ $web17_com_au$.logger = function() {
     var ready_or_wait = function() {
         var id;
         var tries=0;
-        var interval=100;
+        var interval=100; //ms
         var fail_after=10000; //ms
         var check_body = function() {
             me.log('checking for body...');
@@ -117,10 +117,13 @@ $web17_com_au$.logger = function() {
     function init() {
 
       // Throw error and alert user if body-tag not loaded yet.
+      // Replaced by ready_or_wait.
       //ready_or_fail();
 
       // Keep checking if document.body is available.
-      // If it is, we swap over.
+      // If it is, append document fragment in 'body'
+      // to document.body and update 'body'.
+
       ready_or_wait();
 
       // Set ID according to how many loggers are on the
@@ -134,7 +137,7 @@ $web17_com_au$.logger = function() {
       logFrame.style.top='0px';
       logFrame.style.visibility='visible';
       logFrame.style.position='absolute';
-      logFrame.style.border='solid black 1px';
+      logBody.style.border='solid black 1px';
       logFrame.style.backgroundColor='white';
       logFrame.setAttribute("id",ID);
 
@@ -168,7 +171,8 @@ $web17_com_au$.logger = function() {
       logFrame.style.width=width;
       logBody.style.width=width;
       logBody.style.overflow='scroll';
-      logBody.style.height=height;
+      logFrame.style.height=height;
+      logBody.style.height='100%';
       logFrame.style.zIndex=zindex;
 
       // Assemble Logger's html...
@@ -336,8 +340,10 @@ $web17_com_au$.logger = function() {
       width=w;
       me.repeatWrap();
     }
+
     me.setHeight = function(h) {
-      logBody.style.height=h;
+      logFrame.style.height=h;
+      logBody.style.height='100%';
       height=h;
     }
 

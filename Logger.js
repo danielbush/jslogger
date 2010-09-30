@@ -319,7 +319,11 @@ $web17_com_au$.logger = function() {
 
     // Log messages.
 
-    me.log = function(msg) {
+    me.log = function() {
+      msg='';
+      for(var i=0;i<arguments.length;i++) {
+          msg+=arguments[i];
+      }
       var tr = document.createElement("tr");
       var td = document.createElement("td");
       td.style.fontFamily="Courier,monospace";

@@ -184,11 +184,13 @@ $web17_com_au$.logger = function() {
       // ie6 will just expand logBody.
 
       logFrame.style.width=width;
+      logFrame.style.height=height;
+      logFrame.style.zIndex=zindex;
+
       logBody.style.width=width;
       logBody.style.overflow='scroll';
-      logFrame.style.height=height;
       logBody.style.height='100%';
-      logFrame.style.zIndex=zindex;
+
       tbody.style.fontFamily="Courier,monospace";
       tbody.style.fontSize="9pt";
 
@@ -457,7 +459,7 @@ $web17_com_au$.logger = function() {
     //
     // minimize(): toggle hiding of logBody.
 
-    this.minimize = function() {
+    me.minimize = function() {
       if(minimized) {
         minimized=false;
         minimizeButton.innerHTML = ' minimize ';
@@ -476,7 +478,7 @@ $web17_com_au$.logger = function() {
     // repeatWrap() Re-apply the wrap or unwrap;
     //    (we pretend we're in the other state, and run wrap())
 
-    this.wrap = function() {
+    me.wrap = function() {
       if(wrapped) {
         logTable.style.width='2000px';
       } else {
@@ -490,7 +492,7 @@ $web17_com_au$.logger = function() {
       wrapped=!wrapped;
     }
 
-    this.repeatWrap = function() {
+    me.repeatWrap = function() {
       wrapped=!wrapped;
       me.wrap();
     }
@@ -502,7 +504,7 @@ $web17_com_au$.logger = function() {
     //   When expanding, move logger to the top right corner.
     //   When unexpanding, restore the position we were in.
 
-    this.expandWidth = function() {
+    me.expandWidth = function() {
       if(expandedWidth) {
         expandedWidth=false;  // Must call before setWidth.
         me.setWidth(store_width);
@@ -516,12 +518,12 @@ $web17_com_au$.logger = function() {
         me.setWidth('100%');
       }
     }
-    this.increaseWidth = function() {
+    me.increaseWidth = function() {
       if(expandedWidth) return;
       width=parseInt(width)+20+'px';
       me.setWidth(width);
     }
-    this.decreaseWidth = function() {
+    me.decreaseWidth = function() {
       if(expandedWidth) return;
       if (parseInt(width)>20) width=parseInt(width)-20+'px';
       me.setWidth(width);
@@ -529,11 +531,11 @@ $web17_com_au$.logger = function() {
 
     // Height expansion
 
-    this.increaseHeight = function() {
+    me.increaseHeight = function() {
       height=parseInt(height)+30+'px';
       me.setHeight(height);
     }
-    this.decreaseHeight = function() {
+    me.decreaseHeight = function() {
       if (parseInt(height)>30) height=parseInt(height)-30+'px';
       me.setHeight(height);
     }
@@ -543,7 +545,7 @@ $web17_com_au$.logger = function() {
     //
     // Snap logger to top right corner of screen.
 
-    this.snap = function() {
+    me.snap = function() {
       logFrame.style.right='0px';
       logFrame.style.top='0px';
       storePosition();
@@ -578,7 +580,7 @@ $web17_com_au$.logger = function() {
     // already in use.
     // 
 
-    this.isDraggable = function() {
+    me.isDraggable = function() {
       if(expandedWidth) return false;
       return true;
     }
@@ -627,7 +629,7 @@ $web17_com_au$.logger = function() {
       //
 
       var registrations={};
-      this.register = function(draggable,dragHandle,canDrag) {
+      me.register = function(draggable,dragHandle,canDrag) {
         module.addEvent(dragHandle,"mousedown",
           function(e){dragOn(e,draggable,canDrag);});
         module.addEvent(dragHandle,"mouseup",
@@ -637,7 +639,7 @@ $web17_com_au$.logger = function() {
 
     init();
 
-    return this;
+    return me;
 
   } // Logger
 

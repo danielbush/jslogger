@@ -355,12 +355,17 @@ $web17_com_au$.logger = function() {
       makeLogEntry(document.createTextNode(msg));
     }
 
-    me.pp = function(obj) {
-        if(pp) {
-            me.log(pp(obj));
-        } else {
+    me.pp = function() {
+        if(!pp) {
             me.log('[pp not available - did you add the script tag for it?]');
+            return;
         }
+        var str='';
+        for(var i=0;i<arguments.length;i++) {
+            if(i!=0) str+=',';
+            str+=pp(arguments[i]);
+        }
+        me.log(str);
     }
 
     me.divider = function() {

@@ -321,12 +321,18 @@ $web17_com_au$.logger = function() {
 
     var makeLogEntry = function(node) {
       var tr = document.createElement("tr");
+      var td0 = document.createElement("td");
       var td = document.createElement("td");
+      td0.appendChild(document.createTextNode(logCount));
+      td0.style.width="1%";
+      td0.style.color="blue";
       td.appendChild(node);
+      tr.appendChild(td0);
       tr.appendChild(td);
       var trs = tbody.getElementsByTagName("tr");
       //tbody.appendChild(tr);
       tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
+      logCount++;
     }
 
     me.logHTML = function() {
@@ -346,8 +352,7 @@ $web17_com_au$.logger = function() {
               } else msg+=arguments[i];
           } else msg+=arguments[i];
       }
-      makeLogEntry(document.createTextNode(logCount+":\t"+msg));
-      logCount++;
+      makeLogEntry(document.createTextNode(msg));
     }
 
     me.pp = function(obj) {
@@ -359,7 +364,6 @@ $web17_com_au$.logger = function() {
     }
 
     me.divider = function() {
-        
     }
 
     // setWidth(): set width of logger; note the call

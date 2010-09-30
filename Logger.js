@@ -335,24 +335,67 @@ $web17_com_au$.logger = function() {
       logCount++;
     }
 
-    me.logHTML = function() {
+    // Concatentate and maybe process args passed to log()
+    // and functions of that ilk.
+
+    var parseLogArgs = function() {
+        var msg='';
+        for(var i=0;i<arguments.length;i++) {
+            if(arguments[i] instanceof Array) {
+                if(pp) {
+                    for(var j=0;j<arguments[i].length;j++) {
+                        if(j!=0) msg+=',';
+                        msg+=pp(arguments[i][j]);
+                    }
+                } else msg+=arguments[i];
+            } else msg+=arguments[i];
+        }
+        return msg;
     }
 
     // Log messages.
 
     me.log = function() {
-      msg='';
-      for(var i=0;i<arguments.length;i++) {
-          if(arguments[i] instanceof Array) {
-              if(pp) {
-                  for(var j=0;j<arguments[i].length;j++) {
-                      if(j!=0) msg+=',';
-                      msg+=pp(arguments[i][j]);
-                  }
-              } else msg+=arguments[i];
-          } else msg+=arguments[i];
-      }
-      makeLogEntry(document.createTextNode(msg));
+        makeLogEntry(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+    }
+
+    // Create strident log entry!
+    me.alert = function() {
+        var span = document.createElement('SPAN');
+        span.style.backgroundColor='red';
+        span.style.color='white';
+        span.style.fontWeight='bold';
+        span.style.width='100%';
+        span.appendChild(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+        makeLogEntry(span);
+    }
+    // Create angry, glowing log entry.
+    me.fail = function() {
+        var span = document.createElement('SPAN');
+        span.style.backgroundColor='#fdd';
+        span.style.color='red';
+        span.style.fontWeight='bold';
+        span.style.width='100%';
+        span.appendChild(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+        makeLogEntry(span);
+    }
+    // Create happy, green, contented log entry.
+    me.pass = function() {
+        var span = document.createElement('SPAN');
+        span.style.backgroundColor='#afa';
+        span.style.color='green';
+        span.style.fontWeight='bold';
+        span.style.width='100%';
+        span.appendChild(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+        makeLogEntry(span);
     }
 
     me.pp = function() {

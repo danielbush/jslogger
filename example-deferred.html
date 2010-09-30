@@ -41,6 +41,10 @@
           logger.divider();
           logger.pp([1,2,'bar']);
           logger.pp([1,2,'bar'],{a:'foo',b:2});
+          logger.divider();
+          logger.alert("error! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.fail("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.pass("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
 
           function init() {
               logger.log('document.body is now '+document.body);

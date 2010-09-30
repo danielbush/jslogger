@@ -55,10 +55,10 @@ $web17_com_au$.logger = function() {
     var n=0,id;
     // logFrame: the div containing logger.
     // logHeader: title bar at the top.
-    // logHeader2: menu bar near top
+    // logMenu: menu bar near top
     // logTable: log entries are rows in the table.
     var logFrame = document.createElement("div");
-    var logHeader2 = document.createElement("div");
+    var logMenu = document.createElement("div");
     var logHeader = document.createElement("div");
     var logBody = document.createElement("div");
     var logTable = document.createElement("table");
@@ -150,17 +150,17 @@ $web17_com_au$.logger = function() {
       logHeader.style.cursor="move";
       logHeader.style.paddingLeft="0.5em";
 
-      logHeader2.style.backgroundColor="#333";
-      logHeader2.style.color="white";
-      logHeader2.style.fontFamily="sans-serif";
-      logHeader2.style.fontSize="7pt";
-      logHeader2.style.paddingBottom="1px";
-      logHeader2.style.paddingRight="1em";
-      logHeader2.style.cursor="pointer";
-      logHeader2.style.textAlign="right";
+      logMenu.style.backgroundColor="#333";
+      logMenu.style.color="white";
+      logMenu.style.fontFamily="sans-serif";
+      logMenu.style.fontSize="7pt";
+      logMenu.style.paddingBottom="1px";
+      logMenu.style.paddingRight="1em";
+      logMenu.style.cursor="pointer";
+      logMenu.style.textAlign="right";
 
       makeUnselectable(logHeader);
-      makeUnselectable(logHeader2);
+      makeUnselectable(logMenu);
 
       // Width, height, zindex
       //
@@ -181,7 +181,7 @@ $web17_com_au$.logger = function() {
       logTable.appendChild(tbody);
       logBody.appendChild(logTable);
       logFrame.appendChild(logHeader);
-      logFrame.appendChild(logHeader2);
+      logFrame.appendChild(logMenu);
       logFrame.appendChild(logBody);
       body.appendChild(logFrame);
 
@@ -200,7 +200,7 @@ $web17_com_au$.logger = function() {
       minimizeButton.appendChild( document.createTextNode(' minimize ') );
       minimizeButton.style.marginRight='0.2em';
       makeUnselectable(minimizeButton);
-      logHeader2.appendChild(minimizeButton);
+      logMenu.appendChild(minimizeButton);
       module.addEvent(minimizeButton,'click',me.minimize);
 
       // Wrapping
@@ -209,7 +209,7 @@ $web17_com_au$.logger = function() {
       buttonSpan.appendChild( document.createTextNode(' wrap ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.wrap);
       me.wrap();
 
@@ -219,19 +219,19 @@ $web17_com_au$.logger = function() {
       buttonSpan.appendChild( document.createTextNode(' 100% ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.expandWidth);
 
       buttonSpan = document.createElement('SPAN');
       buttonSpan.appendChild( document.createTextNode(' < ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.increaseWidth);
       buttonSpan = document.createElement('SPAN');
       buttonSpan.appendChild( document.createTextNode(' > ') );
       buttonSpan.style.marginRight='0.2em';
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.decreaseWidth);
 
       // Height expansion
@@ -240,13 +240,13 @@ $web17_com_au$.logger = function() {
       buttonSpan.appendChild( document.createTextNode(' \\/ ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.increaseHeight);
       buttonSpan = document.createElement('SPAN');
       buttonSpan.appendChild( document.createTextNode(' /\\ ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.decreaseHeight);
 
       // Snapping
@@ -255,7 +255,7 @@ $web17_com_au$.logger = function() {
       buttonSpan.appendChild( document.createTextNode(' snap ') );
       buttonSpan.style.marginRight='0.2em';
       makeUnselectable(buttonSpan);
-      logHeader2.appendChild(buttonSpan);
+      logMenu.appendChild(buttonSpan);
       module.addEvent(buttonSpan,'click',me.snap);
 
       buttonSpan=null;

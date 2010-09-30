@@ -22,6 +22,7 @@
         <link href="" rel="stylesheet" 
               type="text/css"
               media="screen" /> 
+        <script type="text/javascript" src="pretty_print.js" ></script>
         <script type="text/javascript" src="Logger.js" ></script>
         <script type="text/javascript" >
 
@@ -54,6 +55,15 @@
            before the html document has loaded.</p>
            <input type="button" 
                   onclick="logger.log('This is a log entry.');"
-                  value="Create log entry" />
+                  value="Create log entry" /><br/>
+           <input type="button" 
+                  onclick="logger.pp([1,2,3]);"
+                  value="pp array" /><br/>
+           <input type="button" 
+                  onclick="logger.pp({a:1,b:2,c:'foo',});"
+                  value="pp obj" /><br/>
+           <input type="button" 
+                  onclick="logger.pp(function(){var a='a';});"
+                  value="pp func" /><br/>
 </body>
 </html>

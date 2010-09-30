@@ -13,6 +13,11 @@ var $web17_com_au$ = $web17_com_au$ || {};
 
 $web17_com_au$.logger = function() {
 
+  var pp_module = $web17_com_au$.pretty_print;
+
+  var pp = null;
+  if(pp_module) pp = pp_module.pp;
+
   var ErrorMessages = {
     'E1': "Body-tag not loaded yet - can't set up Logger!" ,
     'E2': "Can't work out event handling interface."
@@ -43,6 +48,7 @@ $web17_com_au$.logger = function() {
   // already loaded by the browser.
 
   module.Logger = function(logTitle,options) {
+
     var title=logTitle;
 
     var me=this;
@@ -313,7 +319,7 @@ $web17_com_au$.logger = function() {
 
     // Log messages.
 
-    this.log = function(msg) {
+    me.log = function(msg) {
       var tr = document.createElement("tr");
       var td = document.createElement("td");
       td.style.fontFamily="Courier,monospace";
@@ -326,13 +332,16 @@ $web17_com_au$.logger = function() {
       logEntry++;
     }
 
+    me.pp = function(obj) {
+        if(pp) {
+            me.log(pp(obj));
+        } else {
+            me.log('[pp not available - did you add the script tag for it?]');
+        }
+    }
 
-    // Some private helper functions.
-    //
     // setWidth(): set width of logger; note the call
     //   to re-wrap text.
-    // storePosition(): record our coordinates
-    // restorePosition(): move us to storedPosition.
 
     me.setWidth = function(w) {
       logFrame.style.width=w;
@@ -347,12 +356,16 @@ $web17_com_au$.logger = function() {
       height=h;
     }
 
+    // storePosition(): record our coordinates
+
     var storePosition = function() {
       storedPosition={
         'top':logFrame.style.top,
         'right':logFrame.style.right
       }
     }
+
+    // restorePosition(): move us to storedPosition.
 
     var restorePosition = function() {
       if (storedPosition) {

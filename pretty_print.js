@@ -5,6 +5,7 @@ var $web17_com_au$ = $web17_com_au$ || {};
 $web17_com_au$.pretty_print = function() {
 
     var module={};
+
     var NEWLINE = '\r\n';
     var rx={},rxg={};
     rx.newline = /\r?\n/;
@@ -17,6 +18,7 @@ $web17_com_au$.pretty_print = function() {
     // - 'nested' parameter >0 means we are recursing; this will suppress
     //   printing to standard out
     // - pp.nested can be set to control recursion
+    // - this function includes rhino and e4x functionality
 
     module.pp = function(obj,nested) {
 
@@ -37,9 +39,7 @@ $web17_com_au$.pretty_print = function() {
         if(obj == undefined || obj == null) {
             if(obj==undefined) return 'undefined';
             if(obj==null) return 'null';
-            if(nested==0 && obj==null) print(obj);
-            // Don't bother printing undefineds.
-            // These occur with rhino print() etc
+            if(nested==0 && obj==null) return 'null';
         }
 
         switch(typeof(obj)) {
@@ -159,7 +159,7 @@ $web17_com_au$.pretty_print = function() {
                 }
             }
 
-        if(nested==0) print(str);
+        if(nested==0) return str;
         return str+'';
     }
 

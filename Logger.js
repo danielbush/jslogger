@@ -323,7 +323,7 @@ $web17_com_au$.logger = function() {
       var tr = document.createElement("tr");
       var td0 = document.createElement("td");
       var td = document.createElement("td");
-      td0.appendChild(document.createTextNode(logCount));
+      td0.appendChild(document.createTextNode(logCount+': '));
       td0.style.width="1%";
       td0.style.color="blue";
       td.appendChild(node);
@@ -364,6 +364,7 @@ $web17_com_au$.logger = function() {
     }
 
     me.divider = function() {
+      makeLogEntry(document.createElement('HR'));
     }
 
     // setWidth(): set width of logger; note the call

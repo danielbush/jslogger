@@ -34,7 +34,9 @@
                              wrap:true});
           logger.log('howdy!');
           logger.log('oh dear, document.body is '+document.body);
-          logger.log('this array is ',[1,2,3],'!');
+          logger.log('this array is ',[[1,2,3]],'!');
+          logger.log('this obj is ',[{a:'foo',b:2}],'!');
+          logger.log('this objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
 
           function init() {
               logger.log('document.body is now '+document.body);

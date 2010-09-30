@@ -322,7 +322,14 @@ $web17_com_au$.logger = function() {
     me.log = function() {
       msg='';
       for(var i=0;i<arguments.length;i++) {
-          msg+=arguments[i];
+          if(arguments[i] instanceof Array) {
+              if(pp) {
+                  for(var j=0;j<arguments[i].length;j++) {
+                      if(j!=0) msg+=',';
+                      msg+=pp(arguments[i][j]);
+                  }
+              } else msg+=arguments[i];
+          } else msg+=arguments[i];
       }
       var tr = document.createElement("tr");
       var td = document.createElement("td");

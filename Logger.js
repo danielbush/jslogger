@@ -319,6 +319,19 @@ $web17_com_au$.logger = function() {
       el.unselectable="on"; // IE ???
     }
 
+    var makeLogEntry = function(node) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.appendChild(node);
+      tr.appendChild(td);
+      var trs = tbody.getElementsByTagName("tr");
+      //tbody.appendChild(tr);
+      tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
+    }
+
+    me.logHTML = function() {
+    }
+
     // Log messages.
 
     me.log = function() {
@@ -333,13 +346,7 @@ $web17_com_au$.logger = function() {
               } else msg+=arguments[i];
           } else msg+=arguments[i];
       }
-      var tr = document.createElement("tr");
-      var td = document.createElement("td");
-      td.appendChild(document.createTextNode(logCount+":\t"+msg));
-      tr.appendChild(td);
-      var trs = tbody.getElementsByTagName("tr");
-      //tbody.appendChild(tr);
-      tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
+      makeLogEntry(document.createTextNode(logCount+":\t"+msg));
       logCount++;
     }
 

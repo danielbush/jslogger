@@ -73,7 +73,7 @@ $web17_com_au$.logger = function() {
     var store_width=width;  // used by expandWidth()
     var height='500px';
     var zindex=1000;
-    var logEntry=1;
+    var logCount=1;
     var agt=navigator.userAgent.toLowerCase();
     var storedPosition; // Place to store position.
     var buttonSpan,minimizeButton;
@@ -180,6 +180,8 @@ $web17_com_au$.logger = function() {
       logFrame.style.height=height;
       logBody.style.height='100%';
       logFrame.style.zIndex=zindex;
+      tbody.style.fontFamily="Courier,monospace";
+      tbody.style.fontSize="9pt";
 
       // Assemble Logger's html...
 
@@ -333,14 +335,12 @@ $web17_com_au$.logger = function() {
       }
       var tr = document.createElement("tr");
       var td = document.createElement("td");
-      td.style.fontFamily="Courier,monospace";
-      td.style.fontSize="9pt";
-      td.appendChild(document.createTextNode(logEntry+":\t"+msg));
+      td.appendChild(document.createTextNode(logCount+":\t"+msg));
       tr.appendChild(td);
       var trs = tbody.getElementsByTagName("tr");
       //tbody.appendChild(tr);
       tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
-      logEntry++;
+      logCount++;
     }
 
     me.pp = function(obj) {
@@ -349,6 +349,10 @@ $web17_com_au$.logger = function() {
         } else {
             me.log('[pp not available - did you add the script tag for it?]');
         }
+    }
+
+    me.divider = function() {
+        
     }
 
     // setWidth(): set width of logger; note the call

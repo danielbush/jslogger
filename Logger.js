@@ -146,32 +146,33 @@ $web17_com_au$.logger = function() {
       while ( document.getElementById("Logger"+n) ) n++;
       ID = 'Logger'+n;
 
-      logFrame.style.color='black';
-      logFrame.style.right='0px';
-      logFrame.style.top='0px';
-      logFrame.style.visibility='visible';
-      logFrame.style.position='absolute';
-      logBody.style.border='solid black 1px';
-      logFrame.style.backgroundColor='white';
+      setProperty(logFrame.style,{
+          color:'black', right:'0px', top:'0px',
+          visibility:'visible',
+          position:'absolute',
+          backgroundColor:'white',
+      });
       logFrame.setAttribute("id",ID);
 
-      logHeader.style.backgroundColor="black";
-      logHeader.style.color="white";
-      logHeader.style.fontFamily="sans-serif";
-      logHeader.style.fontWeight="bold";
-      logHeader.style.fontSize="9pt";
-      logHeader.style.paddingBottom="1px";
-      logHeader.style.cursor="move";
-      logHeader.style.paddingLeft="0.5em";
+      setProperty(logHeader.style,{
+          backgroundColor:"black",
+          color:"white", fontFamily:"sans-serif",
+          fontWeight:"bold", fontSize:"9pt",
+          cursor:"move",
+          paddingBottom:"1px",
+          paddingLeft:"0.5em",
+      });
 
-      logMenu.style.backgroundColor="#333";
-      logMenu.style.color="white";
-      logMenu.style.fontFamily="sans-serif";
-      logMenu.style.fontSize="7pt";
-      logMenu.style.paddingBottom="1px";
-      logMenu.style.paddingRight="1em";
-      logMenu.style.cursor="pointer";
-      logMenu.style.textAlign="right";
+      setProperty(logMenu.style,{
+          backgroundColor:"#333", color:"white",
+          fontFamily:"sans-serif",
+          fontSize:"7pt",
+          paddingBottom:"1px", paddingRight:"1em",
+          cursor:"pointer",
+          textAlign:"right",
+      });
+
+      logBody.style.border='solid black 1px';
 
       makeUnselectable(logHeader);
       makeUnselectable(logMenu);

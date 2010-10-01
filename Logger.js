@@ -67,7 +67,7 @@ $web17_com_au$.logger = function() {
       // This is currently defined as when document.body is available.
 
     var body = document.createDocumentFragment();
-    var logs = {};
+    me.logs = {};
       // The logs that this log frame handles
 
     me.logger = null;
@@ -291,17 +291,22 @@ $web17_com_au$.logger = function() {
       // Use `switch` if you want to display it.
 
       me.add = function(name) {
-          logs[name] = new module.Log(name);
+          me.logs[name] = new module.Log(name);
+          makeButton(
+              name,
+              function(){me.switch(name)},
+              toolbars.logs
+          );
       }
 
       // Switch to a new instance of Log to display.
 
       me.switch = function(name) {
-        if(logs[name]) {
+        if(me.logs[name]) {
             logHeader.innerHTML = "log: "+name;
             logBody.innerHTML='';
-            logBody.appendChild(logs[name].node);
-            me.logger =  logs[name];
+            logBody.appendChild(me.logs[name].node);
+            me.logger =  me.logs[name];
             me.repeatWrap();
         }
       }

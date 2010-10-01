@@ -27,11 +27,13 @@
         <script type="text/javascript" >
 
           var Logger = $web17_com_au$.logger.Logger; 
-          var frame = new Logger('Logger example1',
+          var frame = new Logger('log1',
                             {minimized:false,
                              width:'500px',
                              height:'300px',
                              wrap:true});
+          frame.add('log2');
+          frame.logs.log2.log('entry for log2');
           var logger = frame.logger;
 
           logger.log('howdy!');

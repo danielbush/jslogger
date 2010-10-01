@@ -224,7 +224,7 @@ $web17_com_au$.logger = function() {
       logFrame.appendChild(logBody);
       body.appendChild(logFrame);
 
-      me.logger = logs[title] = new module.Log(title);
+      me.add(title);
       me.switch(title);
 
       // IE 7 and up generally handle position fixed.
@@ -285,6 +285,15 @@ $web17_com_au$.logger = function() {
 
     } // Init()
 
+      // Add a Log instance to this frame but
+      // don't display it.
+      //
+      // Use `switch` if you want to display it.
+
+      me.add = function(name) {
+          logs[name] = new module.Log(name);
+      }
+
       // Switch to a new instance of Log to display.
 
       me.switch = function(name) {
@@ -292,6 +301,7 @@ $web17_com_au$.logger = function() {
             logHeader.innerHTML = "log: "+name;
             logBody.innerHTML='';
             logBody.appendChild(logs[name].node);
+            me.logger =  logs[name];
             me.repeatWrap();
         }
       }

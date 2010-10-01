@@ -25,6 +25,7 @@ $web17_com_au$.logger = function() {
     'E2': "Can't work out event handling interface."
   };
 
+
   var setProperty = function(obj,properties) {
       if(!properties) return;
       for(var i in properties) {
@@ -180,17 +181,22 @@ $web17_com_au$.logger = function() {
           fontWeight:"bold", fontSize:"9pt",
           cursor:"move",
           paddingBottom:"1px",
-          paddingLeft:"0.5em",
+          paddingLeft:"10px",
       });
 
-      setProperty(toolbars.buttons.style,{
-          backgroundColor:"#333", color:"white",
-          fontFamily:"sans-serif",
-          fontSize:"7pt",
-          paddingBottom:"1px", paddingRight:"1em",
-          cursor:"pointer",
-          textAlign:"right",
-      });
+      for(var i in toolbars) {
+          setProperty(toolbars[i].style,{
+              backgroundColor:"#333", color:"white",
+              fontFamily:"sans-serif",
+              fontSize:"7pt",
+              paddingBottom:"1px",
+              paddingRight:"1em",
+              paddingLeft:"10px",
+              cursor:"pointer",
+              textAlign:"right",
+          });
+      }
+      toolbars.logs.style.textAlign = 'left';
 
 
       makeUnselectable(logHeader);

@@ -313,6 +313,7 @@ $web17_com_au$.logger = function() {
           me.logs[name].notify = function() {
               b.innerHTML = name+'['+me.logs[name].size()+'] '
           }
+          return me.logs[name];
       }
 
       // Switch to a new instance of Log to display.

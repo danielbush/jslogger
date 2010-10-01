@@ -32,9 +32,11 @@
                              width:'500px',
                              height:'300px',
                              wrap:true});
-          frame.add('log2');
-          frame.logs.log2.log('entry for log2');
+          var logger2 = frame.add('log2');
           var logger = frame.logger;
+
+          frame.logs.log2.log('entry for log2');
+          logger2.log('entry for log2');
 
           logger.log('howdy!');
           logger.log('oh dear, document.body is '+document.body);

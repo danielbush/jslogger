@@ -38,6 +38,26 @@ Logger can take multiple arguments:
       logger.log('this is ','a test');
       // => 'this is a test'
 
+### Multiple logs
+
+Frame can store multiple log instances and will display available
+log instances as entries in one of its toolbars.
+
+When you instantiate using `new Logger(name)` a default instance
+of a `Log` object is created with `name` and stored in `frame`.
+
+`frame.logs` is a javascript object with keys set to the names
+of the logs and values to the instances of the appropriate `Log`.
+
+Hence `frame.logs[name].log(message)` is one way to log.
+
+You can add a log like this
+      var logger2 = frame.add(name);
+
+You can get the frame to change the log it is displaying by doing
+      frame.change(name);
+You can also click on `name` as displayed in the `frame`'s toolbar.
+
 ### Pretty print variables
 
 Put your variables in an array and logger will pretty print them:
@@ -58,6 +78,11 @@ You can create your own highlight logging functions:
       logger.makeLogFunction(
         'foo',
         {backgroundColor:'blue',color:'white',fontWeight:'bold'});
+
+### Dividers
+
+      logger.divider()
+will create an hr tag as an entry.
 
 ## Debugging execution with logger using "labels"
 

@@ -47,7 +47,12 @@
           logger.green("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
           logger.blue("relax! ",[[1,2,'bar'],{a:'foo',b:2}]);
           logger.yellow("happy! ",[[1,2,'bar'],{a:'foo',b:2}]);
-
+          logger.divider();
+          logger.makeLogFunction(
+              'foo',
+              {backgroundColor:'blue',color:'white',fontWeight:'bold'});
+          logger.foo('new logging function! ',[1,'foo',4])
+              
           function init() {
               logger.log('document.body is now '+document.body);
           }

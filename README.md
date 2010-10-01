@@ -38,6 +38,10 @@ Highlight entries:
       logger.green('passed!');  // green text on green
       logger.blue('relax!'); 
       logger.yellow('happy!');
+You can create your own highlight logging functions:
+      logger.makeLogFunction(
+        'foo',
+        {backgroundColor:'blue',color:'white',fontWeight:'bold'});
 
 
 

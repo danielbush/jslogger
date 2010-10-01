@@ -324,8 +324,11 @@ $web17_com_au$.logger = function() {
 
     // Disable text selection when using logHeader as a drag
     // handle.
+    // 
+    // Also see http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting
 
     var makeUnselectable = function(el) {
+      el.style.WebkitUserSelect="none";  // Chrome/safari.
       el.style.MozUserSelect="none";  // Firefox.
       el.unselectable="on"; // IE ???
     }

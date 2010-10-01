@@ -135,13 +135,14 @@ $web17_com_au$.logger = function() {
 
       // Make a button
 
-      var makeButton = function(label,f,menuNode,options) {
+      var makeButton = function(label,f,menuNode,style) {
           var node = document.createElement('SPAN');
           node.appendChild( document.createTextNode(' '+label+' ') );
           node.style.marginRight='0.2em';
           makeUnselectable(node);
           menuNode.appendChild(node);
           module.addEvent(node,'click',f);
+          if(style) setProperty(node.style,style);
           return node;
       }
 
@@ -196,7 +197,11 @@ $web17_com_au$.logger = function() {
               textAlign:"right",
           });
       }
-      toolbars.logs.style.textAlign = 'left';
+
+        setProperty(toolbars.logs.style,{
+            textAlign:'left',
+            fontSize:'9pt',
+        });
 
 
       makeUnselectable(logHeader);
@@ -231,7 +236,7 @@ $web17_com_au$.logger = function() {
       body.appendChild(logFrame);
 
       me.add(title);
-      me.switch(title);
+      me.change(title);
 
       // IE 7 and up generally handle position fixed.
 
@@ -294,26 +299,46 @@ $web17_com_au$.logger = function() {
       // Add a Log instance to this frame but
       // don't display it.
       //
-      // Use `switch` if you want to display it.
+      // Use `change` if you want to display it.
 
       me.add = function(name) {
           me.logs[name] = new module.Log(name);
-          makeButton(
+          var b = makeButton(
               name,
-              function(){me.switch(name)},
-              toolbars.logs
+              function(){me.change(name)},
+              toolbars.logs,
+              {padding:'3px'}
           );
+          me.logs[name].button = b;
+          me.logs[name].notify = function() {
+              b.innerHTML = name+'['+me.logs[name].size()+'] '
+          }
       }
 
       // Switch to a new instance of Log to display.
 
-      me.switch = function(name) {
+      me.change = function(name) {
         if(me.logs[name]) {
             logHeader.innerHTML = "log: "+name;
             logBody.innerHTML='';
             logBody.appendChild(me.logs[name].node);
             me.logger =  me.logs[name];
             me.repeatWrap();
+        }
+        for(var i in me.logs) {
+            if(me.logs[i].button) {
+                if(i==name) {
+                    if(me.logs[i].button) {
+                        me.logs[i].button.style.backgroundColor='#ccc';
+                        me.logs[i].button.style.color='black';
+                    }
+                } else {
+                    if(me.logs[i].button) {
+                        me.logs[i].button.style.backgroundColor='';
+                        me.logs[i].button.style.color='';
+                    }
+                }
+            }
         }
       }
 
@@ -485,6 +510,10 @@ $web17_com_au$.logger = function() {
       logTable.appendChild(tbody);
       me.node = logTable;
 
+      me.size = function() {
+          return logCount;
+      }
+
       // Create a log entry
 
       var makeLogEntry = function(node,styles) {
@@ -501,6 +530,7 @@ $web17_com_au$.logger = function() {
           //tbody.appendChild(tr);
           tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
           logCount++;
+          if(me.notify) me.notify();
       }
 
       // Concatentate and maybe process args passed to log()

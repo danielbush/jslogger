@@ -59,15 +59,19 @@ You can create your own highlight logging functions:
 ## Debugging execution with logger using "labels"
 
 One way to selectively log execution is to use labels.
+Just add a property to the instance of `logger` (obviously
+nothing that clashes with the core `logger` functions).  Simple
+labels like `A`, `B` etc will do:
       logger.A = true;
       doSomethingComplicated();
       logger.A = false;
-In `doSomethingComplicated` and functions it calls:
+In `doSomethingComplicated` and functions you can add lines like:
       logger.A && logger.log('log something');
 
 This can be useful when are logging execution on something
-that you are testing.  You may only want to analyze it over
-one execution but your tests may execute the same bit of code
+that you are testing.  You may only want to analyze a particular
+assertion and the resulting execution of a piece of code
+but your tests and surrounding assertions may execute the same bit of code
 many many times.
 
 Logger uses the packaging and namespacing standard specified in

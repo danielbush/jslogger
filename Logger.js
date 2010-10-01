@@ -405,21 +405,6 @@ $web17_com_au$.logger = function() {
         'yellow',
         {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
         
-
-
-    me.pp = function() {
-        if(!pp) {
-            me.log('[pp not available - did you add the script tag for it?]');
-            return;
-        }
-        var str='';
-        for(var i=0;i<arguments.length;i++) {
-            if(i!=0) str+=',';
-            str+=pp(arguments[i]);
-        }
-        me.log(str);
-    }
-
     me.divider = function() {
       makeLogEntry(document.createElement('HR'));
     }

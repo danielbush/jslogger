@@ -19,54 +19,63 @@
               content="text/html;charset=utf-8" />
         <meta http-equiv="Content-Style-Type"
               content="text/css" />
+<!--
         <link href="" rel="stylesheet" 
               type="text/css"
               media="screen" /> 
+-->
         <script type="text/javascript" src="pretty_print.js" ></script>
         <script type="text/javascript" src="Logger.js" ></script>
         <script type="text/javascript" >
 
-          var Logger = $web17_com_au$.logger.Logger; 
-          var frame = new Logger('log1',
-                            {minimized:false,
-                             width:'500px',
-                             height:'300px',
-                             wrap:true});
-          var logger2 = frame.add('log2');
-          var logger = frame.logger;
+        var Logger,frame,logger2,logger3,logger;
 
-          frame.logs.log2.log('entry for log2');
-          logger2.log('entry for log2');
+        function run() {
+            Logger = $web17_com_au$.logger.Logger; 
+            frame = new Logger('log1',
+                               {minimized:false,
+                                width:'500px',
+                                height:'300px',
+                                wrap:true});
+            logger2 = frame.add('log2');
+            logger3 = frame.add('log3');
+            logger = frame.logger;
 
-          logger.log('howdy!');
-          logger.log('oh dear, document.body is '+document.body);
+            frame.logs.log2.log('entry for log2');
 
-          logger.divider();
-          logger.log('next entries show use of [] to pretty print objects');
-          logger.log([1,2,3],{a:1,b:2});
-          logger.log([[1,2,3]],[{a:1,b:2}]);
+            logger2.log('entry for log2');
 
-          logger.divider();
-          logger.log('this array is ',[[1,2,3]],'!');
-          logger.log('this obj is ',[{a:'foo',b:2}],'!');
-          logger.log('these objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
+            logger.log('howdy!');
+            logger.log('oh dear, document.body is '+document.body);
 
-          logger.divider();
-          logger.alert("error! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.red("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.green("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.blue("relax! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.yellow("happy! ",[[1,2,'bar'],{a:'foo',b:2}]);
+            logger.divider();
+            logger.log('next entries show use of [] to pretty print objects');
+            logger.log([1,2,3],{a:1,b:2});
+            logger.log([[1,2,3]],[{a:1,b:2}]);
 
-          logger.divider();
-          logger.makeLogFunction(
-              'foo',
-              {backgroundColor:'blue',color:'white',fontWeight:'bold'});
-          logger.foo('new logging function! ',[[1,'foo',4]])
-              
-          function init() {
-              logger.log('document.body is now '+document.body);
-          }
+            logger.divider();
+            logger.log('this array is ',[[1,2,3]],'!');
+            logger.log('this obj is ',[{a:'foo',b:2}],'!');
+            logger.log('these objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
+
+            logger.divider();
+            logger.alert("error! ",[[1,2,'bar'],{a:'foo',b:2}]);
+            logger.red("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
+            logger.green("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
+            logger.blue("relax! ",[[1,2,'bar'],{a:'foo',b:2}]);
+            logger.yellow("happy! ",[[1,2,'bar'],{a:'foo',b:2}]);
+
+            logger.divider();
+            logger.makeLogFunction(
+                'foo',
+                {backgroundColor:'blue',color:'white',fontWeight:'bold'});
+            logger.foo('new logging function! ',[[1,'foo',4]])
+        }
+        run();
+        
+        function init() {
+            logger.log('document.body is now '+document.body);
+        }
         </script>
 
         <style type="text/css" >
@@ -89,7 +98,7 @@
                   onclick="logger.log([[1,2,3]]);"
                   value="pp array" /><br/>
            <input type="button" 
-                  onclick="logger.log([{a:1,b:2,c:'foo',}]);"
+                  onclick="logger.log([{a:1,b:2,c:'foo',d:[1,2,3]}]);"
                   value="pp obj" /><br/>
            <input type="button" 
                   onclick="logger.log([function(){var a='a';}]);"
@@ -97,5 +106,8 @@
            <input type="button" 
                   onclick="frame.logs.log2.log('entry for log2');"
                   value="create entry in log2" /><br/>
+           <input type="button" 
+                  onclick="frame.logs.log3.log('entry for log3');"
+                  value="create entry in log3" /><br/>
 </body>
 </html>

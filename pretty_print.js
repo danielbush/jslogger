@@ -11,6 +11,12 @@ $web17_com_au$.pretty_print = function() {
     rx.newline = /\r?\n/;
     rxg.newline = /\r?\n/g;
 
+    var map = function(f,arr) {
+        for(var i=0;i<arr.length;i++) {
+            f(arr[i]);
+        }
+    }
+
     // Pretty print
     // 
     // - this function will get called recursively on
@@ -62,7 +68,7 @@ $web17_com_au$.pretty_print = function() {
                 // Print as array literal
                 str += '[';
                 if(module.pp.extended) str += NEWLINE;
-                obj.map(function(i){
+                map(function(i){
                     if(obj[i]!==obj) {
                         str+=indent+(module.pp(i,nested+1)+', ');
                         if(module.pp.extended) str += NEWLINE;
@@ -71,8 +77,7 @@ $web17_com_au$.pretty_print = function() {
                         // a = [1,2,3]; a[1] = a; => madness ....
                         if(module.pp.extended) str += NEWLINE;
                     }
-                }
-                       );
+                },obj);
                 str += indent2+']';
                 if(module.pp.extended) str += NEWLINE;
 
@@ -173,3 +178,4 @@ $web17_com_au$.pretty_print = function() {
     return module;
 
 }();
+

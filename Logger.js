@@ -10,11 +10,11 @@
 
 var $web17_com_au$ = $web17_com_au$ || {};
 
-
 $web17_com_au$.logger = function() {
 
   var pp_module = $web17_com_au$.pretty_print;
   var module={};
+
 
   // Only set pp if we have it...
   var pp = null;
@@ -157,7 +157,7 @@ $web17_com_au$.logger = function() {
           color:'black', right:'0px', top:'0px',
           visibility:'visible',
           position:'absolute',
-          backgroundColor:'white',
+          backgroundColor:'white'
       });
 
       logFrame.setAttribute("id",ID);
@@ -168,7 +168,7 @@ $web17_com_au$.logger = function() {
           fontWeight:"bold", fontSize:"9pt",
           cursor:"move",
           paddingBottom:"1px",
-          paddingLeft:"10px",
+          paddingLeft:"10px"
       });
 
       for(var i in toolbars) {
@@ -180,13 +180,13 @@ $web17_com_au$.logger = function() {
               paddingRight:"1em",
               paddingLeft:"10px",
               cursor:"pointer",
-              textAlign:"right",
+              textAlign:"right"
           });
       }
 
         setProperty(toolbars.logs.style,{
             textAlign:'left',
-            fontSize:'9pt',
+            fontSize:'9pt'
         });
 
 
@@ -203,14 +203,14 @@ $web17_com_au$.logger = function() {
       setProperty(logFrame.style,{
           width:width,
           height:height,
-          zIndex:zindex,
+          zIndex:zindex
       });
 
       setProperty(logBody.style,{
           border:'solid black 1px',
           width:width,
           overflow:'scroll',
-          height:'100%',
+          height:'100%'
       });
 
       // Assemble Logger's html...
@@ -307,7 +307,11 @@ $web17_com_au$.logger = function() {
       me.change = function(name) {
         if(me.logs[name]) {
             logHeader.innerHTML = "log: "+name;
-            logBody.innerHTML='';
+            //logBody.innerHTML='';
+                // This upsets ie6; we seem to
+                // permanently lose whatever was there.
+            while(logBody.firstChild)
+                logBody.removeChild(logBody.firstChild);
             logBody.appendChild(me.logs[name].node);
             me.logger =  me.logs[name];
             me.repeatWrap();
@@ -561,21 +565,21 @@ $web17_com_au$.logger = function() {
       // Create strident log entry!
       me.makeLogFunction(
           'alert',
-          {backgroundColor:'red',color:'white',fontWeight:'bold',});
+          {backgroundColor:'red',color:'white',fontWeight:'bold'});
       // Create angry, glowing log entry.
       me.makeLogFunction(
           'red',
-          {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
+          {backgroundColor:'#fee',color:'red',fontWeight:'bold'});
       // Create happy, green, contented log entry.
       me.makeLogFunction(
           'green',
-          {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
+          {backgroundColor:'#afa',color:'green',fontWeight:'bold'});
       me.makeLogFunction(
           'blue',
-          {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
+          {backgroundColor:'#eef',color:'blue',fontWeight:'bold'});
       me.makeLogFunction(
           'yellow',
-          {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
+          {backgroundColor:'#ff8',color:'black',fontWeight:'bold'});
       
       me.divider = function() {
           makeLogEntry(document.createElement('HR'));

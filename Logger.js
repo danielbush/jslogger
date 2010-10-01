@@ -87,7 +87,7 @@ $web17_com_au$.logger = function() {
     var zindex=1000;
     var agt=navigator.userAgent.toLowerCase();
     var storedPosition; // Place to store position.
-    var buttonSpan,minimizeButton;
+    var minimizeButton;
     var minimized=false; // Put us in unminimized mode.
     var wrapped=false;   // Put us in wrapped mode.
     var expandedWidth=false;  // Width is not expanded to fit screen.
@@ -214,71 +214,26 @@ $web17_com_au$.logger = function() {
         //me.log('Using absolute positioning.');
       }
 
-      // Minimization
+      var buttons = {};
+      var makeButton = function(label,f,options) {
+          var node = document.createElement('SPAN');
+          node.appendChild( document.createTextNode(' '+label+' ') );
+          node.style.marginRight='0.2em';
+          makeUnselectable(node);
+          logMenu.appendChild(node);
+          module.addEvent(node,'click',f);
+          return node;
+      }
 
-      minimizeButton = document.createElement('SPAN');
-      minimizeButton.appendChild( document.createTextNode(' minimize ') );
-      minimizeButton.style.marginRight='0.2em';
-      makeUnselectable(minimizeButton);
-      logMenu.appendChild(minimizeButton);
-      module.addEvent(minimizeButton,'click',me.minimize);
+      minimizeButton = makeButton('minimize',me.minimize);
+      makeButton('wrap',me.wrap);
+      makeButton('100%',me.expandWidth);
+      makeButton('<',me.increaseWidth);
+      makeButton('>',me.decreaseWidth);
+      makeButton('\\/',me.increaseHeight);
+      makeButton('/\\',me.decreaseHeight);
+      makeButton('snap',me.snap);
 
-      // Wrapping
-
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' wrap ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.wrap);
-      me.wrap();
-
-      // Width expansion
-
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' 100% ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.expandWidth);
-
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' < ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.increaseWidth);
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' > ') );
-      buttonSpan.style.marginRight='0.2em';
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.decreaseWidth);
-
-      // Height expansion
-
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' \\/ ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.increaseHeight);
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' /\\ ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.decreaseHeight);
-
-      // Snapping
-
-      buttonSpan = document.createElement('SPAN');
-      buttonSpan.appendChild( document.createTextNode(' snap ') );
-      buttonSpan.style.marginRight='0.2em';
-      makeUnselectable(buttonSpan);
-      logMenu.appendChild(buttonSpan);
-      module.addEvent(buttonSpan,'click',me.snap);
-
-      buttonSpan=null;
 
       // Make logHeader a drag handle for dragging
       // the logFrame.

@@ -338,7 +338,7 @@ $web17_com_au$.logger = function() {
       var td0 = document.createElement("td");
       var td = document.createElement("td");
       td0.appendChild(document.createTextNode(logCount+': '));
-      setProperty(td0.style,{width:'1%',color:'blue'});
+      setProperty(td0.style,{width:'1%',color:'#666'});
       setProperty(td.style,styles);
       td.appendChild(node);
       tr.appendChild(td0);
@@ -386,7 +386,7 @@ $web17_com_au$.logger = function() {
             {backgroundColor:'red',color:'white',fontWeight:'bold',});
     }
     // Create angry, glowing log entry.
-    me.fail = function() {
+    me.red = function() {
         var span = document.createElement('SPAN');
         span.appendChild(document.createTextNode(
             parseLogArgs.apply(me,arguments)
@@ -396,7 +396,7 @@ $web17_com_au$.logger = function() {
             {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
     }
     // Create happy, green, contented log entry.
-    me.pass = function() {
+    me.green = function() {
         var span = document.createElement('SPAN');
         span.appendChild(document.createTextNode(
             parseLogArgs.apply(me,arguments)
@@ -404,6 +404,24 @@ $web17_com_au$.logger = function() {
         makeLogEntry(
             span,
             {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
+    }
+    me.blue = function() {
+        var span = document.createElement('SPAN');
+        span.appendChild(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+        makeLogEntry(
+            span,
+            {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
+    }
+    me.yellow = function() {
+        var span = document.createElement('SPAN');
+        span.appendChild(document.createTextNode(
+            parseLogArgs.apply(me,arguments)
+        ));
+        makeLogEntry(
+            span,
+            {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
     }
 
     me.pp = function() {

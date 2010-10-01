@@ -37,14 +37,16 @@
           logger.divider();
           logger.log('this array is ',[[1,2,3]],'!');
           logger.log('this obj is ',[{a:'foo',b:2}],'!');
-          logger.log('this objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
+          logger.log('these objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
           logger.divider();
           logger.pp([1,2,'bar']);
           logger.pp([1,2,'bar'],{a:'foo',b:2});
           logger.divider();
           logger.alert("error! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.fail("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
-          logger.pass("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.red("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.green("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.blue("relax! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.yellow("happy! ",[[1,2,'bar'],{a:'foo',b:2}]);
 
           function init() {
               logger.log('document.body is now '+document.body);

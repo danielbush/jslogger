@@ -34,8 +34,10 @@ Put your variables in an array and logger will pretty print them:
       logger.log('a is ',[a],' and b is ',[b]);
 Highlight entries:
       logger.alert('error!');  // white text on red
-      logger.fail('fail!');    // red text on pink
-      logger.pass('passed!');  // green text on green
+      logger.red('fail!');    // red text on pink
+      logger.green('passed!');  // green text on green
+      logger.blue('relax!'); 
+      logger.yellow('happy!');
 
 
 

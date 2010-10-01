@@ -155,6 +155,7 @@ $web17_com_au$.logger = function() {
           position:'absolute',
           backgroundColor:'white',
       });
+
       logFrame.setAttribute("id",ID);
 
       setProperty(logHeader.style,{
@@ -185,14 +186,18 @@ $web17_com_au$.logger = function() {
       // for the scroll setting to work.  Otherwise
       // ie6 will just expand logBody.
 
-      logFrame.style.width=width;
-      logFrame.style.height=height;
-      logFrame.style.zIndex=zindex;
+      setProperty(logFrame.style,{
+          width:width,
+          height:height,
+          zIndex:zindex,
+      });
 
-      logBody.style.border='solid black 1px';
-      logBody.style.width=width;
-      logBody.style.overflow='scroll';
-      logBody.style.height='100%';
+      setProperty(logBody.style,{
+          border:'solid black 1px',
+          width:width,
+          overflow:'scroll',
+          height:'100%',
+      });
 
       // Assemble Logger's html...
 

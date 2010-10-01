@@ -311,7 +311,7 @@ $web17_com_au$.logger = function() {
           );
           me.logs[name].button = b;
           me.logs[name].notify = function() {
-              b.innerHTML = name+'['+me.logs[name].size()+'] '
+              b.innerHTML = name+'['+me.logs[name].size()-1+'] '
           }
           return me.logs[name];
       }

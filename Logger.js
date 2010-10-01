@@ -83,6 +83,7 @@ $web17_com_au$.logger = function() {
     var logBody = document.createElement("div");
     var toolbars = {};
     toolbars.buttons = document.createElement("div");
+    toolbars.logs = document.createElement("div");
 
     var width='250px';
     var store_width=width;  // used by expandWidth()
@@ -194,6 +195,7 @@ $web17_com_au$.logger = function() {
 
       makeUnselectable(logHeader);
       makeUnselectable(toolbars.buttons);
+      makeUnselectable(toolbars.logs);
 
       // Width, height, zindex
       //
@@ -216,14 +218,14 @@ $web17_com_au$.logger = function() {
 
       // Assemble Logger's html...
 
-      logHeader.appendChild(document.createTextNode("log: "+title));
-
-      me.logger = logs['default'] = new module.Log('default');
-      logBody.appendChild(me.logger.node);
       logFrame.appendChild(logHeader);
       logFrame.appendChild(toolbars.buttons);
+      logFrame.appendChild(toolbars.logs);
       logFrame.appendChild(logBody);
       body.appendChild(logFrame);
+
+      me.logger = logs[title] = new module.Log(title);
+      me.switch(title);
 
       // IE 7 and up generally handle position fixed.
 
@@ -282,6 +284,17 @@ $web17_com_au$.logger = function() {
         }
 
     } // Init()
+
+      // Switch to a new instance of Log to display.
+
+      me.switch = function(name) {
+        if(logs[name]) {
+            logHeader.innerHTML = "log: "+name;
+            logBody.innerHTML='';
+            logBody.appendChild(logs[name].node);
+            me.repeatWrap();
+        }
+      }
 
 
     // Disable text selection when using logHeader as a drag

@@ -56,17 +56,21 @@ $web17_com_au$.logger = function() {
   // Logger instances require that the body-tag be
   // already loaded by the browser.
 
-  module.Logger = function(logTitle,options) {
-
-    var title=logTitle;
+  module.LogFrame = module.Logger = function(logTitle,options) {
 
     var me=this;
+
+    var title=logTitle;
 
     var READY = false;
       // Flag to indicate when logger can display itself.
       // This is currently defined as when document.body is available.
 
     var body = document.createDocumentFragment();
+    var logs = {};
+      // The logs that this log frame handles
+    me.logger = null;
+
     var n=0,id;
     // logFrame: the div containing logger.
     // logHeader: title bar at the top.
@@ -76,13 +80,11 @@ $web17_com_au$.logger = function() {
     var logMenu = document.createElement("div");
     var logHeader = document.createElement("div");
     var logBody = document.createElement("div");
-    var logTable = document.createElement("table");
-    var tbody = document.createElement("tbody");
+
     var width='250px';
     var store_width=width;  // used by expandWidth()
     var height='500px';
     var zindex=1000;
-    var logCount=1;
     var agt=navigator.userAgent.toLowerCase();
     var storedPosition; // Place to store position.
     var buttonSpan,minimizeButton;
@@ -111,7 +113,7 @@ $web17_com_au$.logger = function() {
         var interval=100; //ms
         var fail_after=10000; //ms
         var check_body = function() {
-            me.log('checking for body...');
+            //me.log('checking for body...');
             if(document.body) {
                 document.body.appendChild(body);
                 body = document.body;
@@ -173,7 +175,6 @@ $web17_com_au$.logger = function() {
           textAlign:"right",
       });
 
-      logBody.style.border='solid black 1px';
 
       makeUnselectable(logHeader);
       makeUnselectable(logMenu);
@@ -188,18 +189,17 @@ $web17_com_au$.logger = function() {
       logFrame.style.height=height;
       logFrame.style.zIndex=zindex;
 
+      logBody.style.border='solid black 1px';
       logBody.style.width=width;
       logBody.style.overflow='scroll';
       logBody.style.height='100%';
 
-      tbody.style.fontFamily="Courier,monospace";
-      tbody.style.fontSize="9pt";
-
       // Assemble Logger's html...
 
       logHeader.appendChild(document.createTextNode("log: "+title));
-      logTable.appendChild(tbody);
-      logBody.appendChild(logTable);
+
+      me.logger = logs['default'] = new module.Log('default');
+      logBody.appendChild(me.logger.node);
       logFrame.appendChild(logHeader);
       logFrame.appendChild(logMenu);
       logFrame.appendChild(logBody);
@@ -334,81 +334,6 @@ $web17_com_au$.logger = function() {
       el.unselectable="on"; // IE ???
     }
 
-    // Create a log entry
-
-    var makeLogEntry = function(node,styles) {
-      var tr = document.createElement("tr");
-      var td0 = document.createElement("td");
-      var td = document.createElement("td");
-      td0.appendChild(document.createTextNode(logCount+': '));
-      setProperty(td0.style,{width:'1%',color:'#666'});
-      setProperty(td.style,styles);
-      td.appendChild(node);
-      tr.appendChild(td0);
-      tr.appendChild(td);
-      var trs = tbody.getElementsByTagName("tr");
-      //tbody.appendChild(tr);
-      tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
-      logCount++;
-    }
-
-    // Concatentate and maybe process args passed to log()
-    // and functions of that ilk.  Return resulting string
-    // which will then get logged.
-
-    var parseLogArgs = function() {
-        var msg='';
-        for(var i=0;i<arguments.length;i++) {
-            if(arguments[i] instanceof Array) {
-                if(pp) {
-                    for(var j=0;j<arguments[i].length;j++) {
-                        if(j!=0) msg+=',';
-                        msg+=pp(arguments[i][j]);
-                    }
-                } else msg+=arguments[i];
-            } else msg+=arguments[i];
-        }
-        return msg;
-    }
-
-    // Generates a function that logs.
-
-    me.makeLogFunction = function(name,options) {
-        return me[name] = function() {
-            var span = document.createElement('SPAN');
-            span.appendChild(document.createTextNode(
-                parseLogArgs.apply(me,arguments)
-            ));
-            makeLogEntry(span,options);
-        };
-    }
-
-    // Basic logging
-    me.makeLogFunction( 'log' );
-
-    // Create strident log entry!
-    me.makeLogFunction(
-        'alert',
-        {backgroundColor:'red',color:'white',fontWeight:'bold',});
-    // Create angry, glowing log entry.
-    me.makeLogFunction(
-        'red',
-        {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
-    // Create happy, green, contented log entry.
-    me.makeLogFunction(
-        'green',
-        {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
-    me.makeLogFunction(
-        'blue',
-        {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
-    me.makeLogFunction(
-        'yellow',
-        {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
-        
-    me.divider = function() {
-      makeLogEntry(document.createElement('HR'));
-    }
-
     // setWidth(): set width of logger; note the call
     //   to re-wrap text.
 
@@ -469,13 +394,13 @@ $web17_com_au$.logger = function() {
 
     me.wrap = function() {
       if(wrapped) {
-        logTable.style.width='2000px';
+        me.logger.node.style.width='2000px';
       } else {
         if(expandedWidth) {
-          logTable.style.width='90%';
+          me.logger.node.style.width='90%';
         } else {
           // 20 is for the scroll bar on the right.
-          logTable.style.width=parseInt(width)-20+'px';
+          me.logger.node.style.width=parseInt(width)-20+'px';
         }
       }
       wrapped=!wrapped;
@@ -485,7 +410,6 @@ $web17_com_au$.logger = function() {
       wrapped=!wrapped;
       me.wrap();
     }
-
 
     // Width expansion
     //
@@ -551,7 +475,97 @@ $web17_com_au$.logger = function() {
 
     return me;
 
-  } // Logger
+  } // LogFrame
+
+
+  module.Log = function(name) {
+
+      var me=this;
+      var title=name;
+      var logTable = document.createElement("table");
+      var tbody = document.createElement("tbody");
+      var logCount=1;
+      tbody.style.fontFamily="Courier,monospace";
+      tbody.style.fontSize="9pt";
+      logTable.appendChild(tbody);
+      me.node = logTable;
+
+      // Create a log entry
+
+      var makeLogEntry = function(node,styles) {
+          var tr = document.createElement("tr");
+          var td0 = document.createElement("td");
+          var td = document.createElement("td");
+          td0.appendChild(document.createTextNode(logCount+': '));
+          setProperty(td0.style,{width:'1%',color:'red'});
+          setProperty(td.style,styles);
+          td.appendChild(node);
+          tr.appendChild(td0);
+          tr.appendChild(td);
+          var trs = tbody.getElementsByTagName("tr");
+          //tbody.appendChild(tr);
+          tbody.insertBefore(tr,(trs.length>0?trs[0]:null));
+          logCount++;
+      }
+
+      // Concatentate and maybe process args passed to log()
+      // and functions of that ilk.  Return resulting string
+      // which will then get logged.
+
+      var parseLogArgs = function() {
+          var msg='';
+          for(var i=0;i<arguments.length;i++) {
+              if(arguments[i] instanceof Array) {
+                  if(pp) {
+                      for(var j=0;j<arguments[i].length;j++) {
+                          if(j!=0) msg+=',';
+                          msg+=pp(arguments[i][j]);
+                      }
+                  } else msg+=arguments[i];
+              } else msg+=arguments[i];
+          }
+          return msg;
+      }
+
+      // Generates a function that logs.
+
+      me.makeLogFunction = function(name,options) {
+          return me[name] = function() {
+              var span = document.createElement('SPAN');
+              span.appendChild(document.createTextNode(
+                  parseLogArgs.apply(me,arguments)
+              ));
+              makeLogEntry(span,options);
+          };
+      }
+
+      // Basic logging
+      me.makeLogFunction( 'log' );
+
+      // Create strident log entry!
+      me.makeLogFunction(
+          'alert',
+          {backgroundColor:'red',color:'white',fontWeight:'bold',});
+      // Create angry, glowing log entry.
+      me.makeLogFunction(
+          'red',
+          {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
+      // Create happy, green, contented log entry.
+      me.makeLogFunction(
+          'green',
+          {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
+      me.makeLogFunction(
+          'blue',
+          {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
+      me.makeLogFunction(
+          'yellow',
+          {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
+      
+      me.divider = function() {
+          makeLogEntry(document.createElement('HR'));
+      }
+
+  }
 
   // Add / remove event handlers.
   //

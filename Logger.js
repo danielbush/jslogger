@@ -26,6 +26,7 @@ $web17_com_au$.logger = function() {
   };
 
   var setProperty = function(obj,properties) {
+      if(!properties) return;
       for(var i in properties) {
           if(properties.hasOwnProperty(i)) {
               obj[i] = properties[i];
@@ -333,6 +334,8 @@ $web17_com_au$.logger = function() {
       el.unselectable="on"; // IE ???
     }
 
+    // Create a log entry
+
     var makeLogEntry = function(node,styles) {
       var tr = document.createElement("tr");
       var td0 = document.createElement("td");
@@ -350,7 +353,8 @@ $web17_com_au$.logger = function() {
     }
 
     // Concatentate and maybe process args passed to log()
-    // and functions of that ilk.
+    // and functions of that ilk.  Return resulting string
+    // which will then get logged.
 
     var parseLogArgs = function() {
         var msg='';
@@ -367,62 +371,41 @@ $web17_com_au$.logger = function() {
         return msg;
     }
 
-    // Log messages.
-
-    me.log = function() {
-        makeLogEntry(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
+    me.makeLogFunction = function(name,options) {
+        return me[name] = function() {
+            var span = document.createElement('SPAN');
+            span.appendChild(document.createTextNode(
+                parseLogArgs.apply(me,arguments)
+            ));
+            makeLogEntry(
+                span,
+                options);
+        };
     }
+
+    // Basic logging
+    me.makeLogFunction( 'log' );
 
     // Create strident log entry!
-    me.alert = function() {
-        var span = document.createElement('SPAN');
-        span.appendChild(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
-        makeLogEntry(
-            span,
-            {backgroundColor:'red',color:'white',fontWeight:'bold',});
-    }
+    me.makeLogFunction(
+        'alert',
+        {backgroundColor:'red',color:'white',fontWeight:'bold',});
     // Create angry, glowing log entry.
-    me.red = function() {
-        var span = document.createElement('SPAN');
-        span.appendChild(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
-        makeLogEntry(
-            span,
-            {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
-    }
+    me.makeLogFunction(
+        'red',
+        {backgroundColor:'#fee',color:'red',fontWeight:'bold',});
     // Create happy, green, contented log entry.
-    me.green = function() {
-        var span = document.createElement('SPAN');
-        span.appendChild(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
-        makeLogEntry(
-            span,
-            {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
-    }
-    me.blue = function() {
-        var span = document.createElement('SPAN');
-        span.appendChild(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
-        makeLogEntry(
-            span,
-            {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
-    }
-    me.yellow = function() {
-        var span = document.createElement('SPAN');
-        span.appendChild(document.createTextNode(
-            parseLogArgs.apply(me,arguments)
-        ));
-        makeLogEntry(
-            span,
-            {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
-    }
+    me.makeLogFunction(
+        'green',
+        {backgroundColor:'#afa',color:'green',fontWeight:'bold',});
+    me.makeLogFunction(
+        'blue',
+        {backgroundColor:'#eef',color:'blue',fontWeight:'bold',});
+    me.makeLogFunction(
+        'yellow',
+        {backgroundColor:'#ff8',color:'black',fontWeight:'bold',});
+        
+
 
     me.pp = function() {
         if(!pp) {

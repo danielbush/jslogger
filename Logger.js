@@ -77,12 +77,12 @@ $web17_com_au$.logger = function() {
 
     // logFrame: the div containing logger.
     // logHeader: title bar at the top.
-    // logMenu: menu bar near top
     // logTable: log entries are rows in the table.
     var logFrame = document.createElement("div");
-    var logMenu = document.createElement("div");
     var logHeader = document.createElement("div");
     var logBody = document.createElement("div");
+    var toolbars = {};
+    toolbars.buttons = document.createElement("div");
 
     var width='250px';
     var store_width=width;  // used by expandWidth()
@@ -182,7 +182,7 @@ $web17_com_au$.logger = function() {
           paddingLeft:"0.5em",
       });
 
-      setProperty(logMenu.style,{
+      setProperty(toolbars.buttons.style,{
           backgroundColor:"#333", color:"white",
           fontFamily:"sans-serif",
           fontSize:"7pt",
@@ -193,7 +193,7 @@ $web17_com_au$.logger = function() {
 
 
       makeUnselectable(logHeader);
-      makeUnselectable(logMenu);
+      makeUnselectable(toolbars.buttons);
 
       // Width, height, zindex
       //
@@ -221,7 +221,7 @@ $web17_com_au$.logger = function() {
       me.logger = logs['default'] = new module.Log('default');
       logBody.appendChild(me.logger.node);
       logFrame.appendChild(logHeader);
-      logFrame.appendChild(logMenu);
+      logFrame.appendChild(toolbars.buttons);
       logFrame.appendChild(logBody);
       body.appendChild(logFrame);
 
@@ -235,14 +235,14 @@ $web17_com_au$.logger = function() {
       }
 
 
-      buttons.minimize = makeButton('minimize',me.minimize,logMenu);
-      makeButton('wrap',me.wrap,logMenu);
-      makeButton('100%',me.expandWidth,logMenu);
-      makeButton('<',me.increaseWidth,logMenu);
-      makeButton('>',me.decreaseWidth,logMenu);
-      makeButton('\\/',me.increaseHeight,logMenu);
-      makeButton('/\\',me.decreaseHeight,logMenu);
-      makeButton('snap',me.snap,logMenu);
+      buttons.minimize = makeButton('minimize',me.minimize,toolbars.buttons);
+      makeButton('wrap',me.wrap,toolbars.buttons);
+      makeButton('100%',me.expandWidth,toolbars.buttons);
+      makeButton('<',me.increaseWidth,toolbars.buttons);
+      makeButton('>',me.decreaseWidth,toolbars.buttons);
+      makeButton('\\/',me.increaseHeight,toolbars.buttons);
+      makeButton('/\\',me.decreaseHeight,toolbars.buttons);
+      makeButton('snap',me.snap,toolbars.buttons);
 
 
       // Make logHeader a drag handle for dragging

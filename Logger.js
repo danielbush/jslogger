@@ -574,57 +574,6 @@ $web17_com_au$.logger = function() {
       return true;
     }
 
-    function DragServer() { 
-      var me=this;
-
-      //var body = document.getElementsByTagName("body")[0];
-        // See not above regarding this invocation.
-      var body = document.body;
-
-      var mouseX,objX;
-      var mouseY,objY;
-
-      // Draggable element.
-      var obj=null;
-
-      var dragOn = function(e,draggable,canDrag) {
-        if(!canDrag()) return;
-        obj=draggable;
-        mouseX=parseInt(e.clientX);
-        mouseY=parseInt(e.clientY);
-        objX = parseInt(obj.style.right+0);
-        objY = parseInt(obj.style.top+0);
-        module.addEvent(document,"mousemove",drag);
-      }
-      var dragOff = function(e,draggable,canDrag) {
-        if(!canDrag()) return;
-        module.removeEvent(document,"mousemove",drag);
-        obj=null;
-      }
-      var drag = function(e) {
-        obj.style.right = objX-(e.clientX-mouseX)+'px';
-        obj.style.top = objY+e.clientY-mouseY+'px';
-      }
-
-      // Register a draggable item along with its drag handle.
-      //
-      // Draggable: a reference to the element we want to
-      // drag.
-      // DragHandle: a reference to the element which acts
-      // as our drag handle.
-      // canDrag(): is a function that determines whether
-      // we proceed with the dragging operation.  Should return
-      // true or false.
-      //
-
-      var registrations={};
-      me.register = function(draggable,dragHandle,canDrag) {
-        module.addEvent(dragHandle,"mousedown",
-          function(e){dragOn(e,draggable,canDrag);});
-        module.addEvent(dragHandle,"mouseup",
-          function(e){dragOff(e,draggable,canDrag);});
-      }
-    }
 
     init();
 
@@ -669,6 +618,58 @@ $web17_com_au$.logger = function() {
       throw new Error('E2: '+ErrorMessages['E2']);
     }
   }
+
+    function DragServer() { 
+        var me=this;
+
+        //var body = document.getElementsByTagName("body")[0];
+        // See not above regarding this invocation.
+        var body = document.body;
+
+        var mouseX,objX;
+        var mouseY,objY;
+
+        // Draggable element.
+        var obj=null;
+
+        var dragOn = function(e,draggable,canDrag) {
+            if(!canDrag()) return;
+            obj=draggable;
+            mouseX=parseInt(e.clientX);
+            mouseY=parseInt(e.clientY);
+            objX = parseInt(obj.style.right+0);
+            objY = parseInt(obj.style.top+0);
+            module.addEvent(document,"mousemove",drag);
+        }
+        var dragOff = function(e,draggable,canDrag) {
+            if(!canDrag()) return;
+            module.removeEvent(document,"mousemove",drag);
+            obj=null;
+        }
+        var drag = function(e) {
+            obj.style.right = objX-(e.clientX-mouseX)+'px';
+            obj.style.top = objY+e.clientY-mouseY+'px';
+        }
+
+        // Register a draggable item along with its drag handle.
+        //
+        // Draggable: a reference to the element we want to
+        // drag.
+        // DragHandle: a reference to the element which acts
+        // as our drag handle.
+        // canDrag(): is a function that determines whether
+        // we proceed with the dragging operation.  Should return
+        // true or false.
+        //
+
+        var registrations={};
+        me.register = function(draggable,dragHandle,canDrag) {
+            module.addEvent(dragHandle,"mousedown",
+                            function(e){dragOn(e,draggable,canDrag);});
+            module.addEvent(dragHandle,"mouseup",
+                            function(e){dragOff(e,draggable,canDrag);});
+        }
+    }
 
   return module;
 

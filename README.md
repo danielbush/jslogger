@@ -28,16 +28,22 @@ Logging is as simple as:
 Logger can take multiple arguments:
       logger.log('this is ','a test');
       // => 'this is a test'
+
+### Pretty print variables
+
 Put your variables in an array and logger will pretty print them:
       var a = [1,2,3];
       var b = {a:1,b:2,c:'foo'};
       logger.log('a is ',[a],' and b is ',[b]);
-Highlight entries:
+
+### Highlight entries:
+
       logger.alert('error!');  // white text on red
       logger.red('fail!');    // red text on pink
       logger.green('passed!');  // green text on green
       logger.blue('relax!'); 
       logger.yellow('happy!');
+
 You can create your own highlight logging functions:
       logger.makeLogFunction(
         'foo',

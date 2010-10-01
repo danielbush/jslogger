@@ -371,15 +371,15 @@ $web17_com_au$.logger = function() {
         return msg;
     }
 
+    // Generates a function that logs.
+
     me.makeLogFunction = function(name,options) {
         return me[name] = function() {
             var span = document.createElement('SPAN');
             span.appendChild(document.createTextNode(
                 parseLogArgs.apply(me,arguments)
             ));
-            makeLogEntry(
-                span,
-                options);
+            makeLogEntry(span,options);
         };
     }
 

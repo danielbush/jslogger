@@ -264,24 +264,20 @@ $web17_com_au$.logger = function() {
         }
       );
 
-      // Process any options passed in by user.
+        // Process options passed into Logger at
+        // instantiation time.
+        //
+        // Should be run at the end of init().
 
-      processOptions(options);
+        if(options) {
+            options.minimized && me.minimize();
+            options.width && me.setWidth(options.width);
+            options.height && me.setHeight(options.height);
+            options.wrap && me.wrap();
+        }
 
     } // Init()
 
-    // Process options passed into Logger at
-    // instantiation time.
-    //
-    // Should be run at the end of init().
-
-    function processOptions(options) {
-      if(!options) return;
-      options.minimized && me.minimize();
-      options.width && me.setWidth(options.width);
-      options.height && me.setHeight(options.height);
-      options.wrap && me.wrap();
-    }
 
     // Disable text selection when using logHeader as a drag
     // handle.

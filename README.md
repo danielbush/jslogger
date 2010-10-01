@@ -19,14 +19,17 @@ Set up script tags:
       <script type="text/javascript" src="path/to/Logger.js" ></script>
 Then:
       var Logger = $web17_com_au$.logger.Logger;
-      var logger;
-      logger = new Logger('some log');
+      var logger,frame;
+      frame = new Logger('some log');
+      logger = frame.logger;
 
-When you create a logger, it will use `position:fixed` and
+This creates a frame for displaying a log and a log called 'some log'.
+
+When you create a frame, it will use `position:fixed` and
 sit at `right:0px;top:0px`, ie the top right corner.
 
-Configure appearance of the logger:
-      logger = new Logger('some log',
+Configure appearance of the frame:
+      frame = new Logger('some log',
         {width:'400px',height:'92%',minimize:true,wrap:true}
       );
 Logging is as simple as:

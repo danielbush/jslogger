@@ -35,6 +35,7 @@ Put your variables in an array and logger will pretty print them:
       var a = [1,2,3];
       var b = {a:1,b:2,c:'foo'};
       logger.log('a is ',[a],' and b is ',[b]);
+      logger.log('a,b are ',[a,b]);
 
 ### Highlight entries:
 

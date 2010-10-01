@@ -43,7 +43,19 @@ You can create your own highlight logging functions:
         'foo',
         {backgroundColor:'blue',color:'white',fontWeight:'bold'});
 
+## Debugging execution with logger using "labels"
 
+One way to selectively log execution is to use labels.
+      logger.A = true;
+      doSomethingComplicated();
+      logger.A = false;
+In doSomethingComplicated and functions it calls:
+      logger.A && logger.log('log something');
+
+This can be useful when are logging execution on something
+that you are testing.  You may only want to analyze it over
+one execution but your tests may execute the same bit of code
+many many times.
 
 Logger uses the packaging and namespacing standard specified in
 README.modules.html.  The latest version can be found at:

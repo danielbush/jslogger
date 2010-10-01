@@ -37,25 +37,12 @@ $web17_com_au$.logger = function() {
 
   // Logger object
   //
-  // A floating div that you can use
-  // to log events with.
-  //
-  // Setup:
-  //   <html><head>
-  //   <script ... src="Logger.js" />
-  //    <!-- Put Logger before other script includes.
-  //   <script ... src="other.js" />
-  // Usage:
-  //
-  //   var Logger = $web17_com_au$.logger.Logger;
-  //
-  //   L = new Logger('title');
-  //   ...
-  //   L.log("some message here...");
-  //
-  // NOTE:
-  // Logger instances require that the body-tag be
-  // already loaded by the browser.
+  // See README for usage.
+  // 
+  // Note:
+  // - Logger is really a LogFrame which represents a frame
+  //   that sits in the browser window and can display
+  //   and handle multiple logs
 
   module.LogFrame = module.Logger = function(logTitle,options) {
 
@@ -98,6 +85,8 @@ $web17_com_au$.logger = function() {
     var expandedWidth=false;  // Width is not expanded to fit screen.
     var dragServer = new DragServer();
 
+    // Throw error and alert user if body-tag not loaded yet.
+    // Replaced by ready_or_wait.
 
     var ready_or_fail = function() {
       //body=document.getElementsByTagName("body")[0];
@@ -111,6 +100,10 @@ $web17_com_au$.logger = function() {
         throw new Error("E1: "+ErrorMessages['E1']);
       }
     }
+
+    // Keep checking if document.body is available.
+    // If it is, append document fragment in 'body'
+    // to document.body and update 'body'.
 
     var ready_or_wait = function() {
         var id;
@@ -151,14 +144,7 @@ $web17_com_au$.logger = function() {
 
     function init() {
 
-      // Throw error and alert user if body-tag not loaded yet.
-      // Replaced by ready_or_wait.
       //ready_or_fail();
-
-      // Keep checking if document.body is available.
-      // If it is, append document fragment in 'body'
-      // to document.body and update 'body'.
-
       ready_or_wait();
 
       // Set ID according to how many loggers are on the
@@ -485,6 +471,7 @@ $web17_com_au$.logger = function() {
       storePosition();
     }
 
+    // Prevent dragging of this frame in some situations.
 
     me.isDraggable = function() {
       if(expandedWidth) return false;
@@ -498,6 +485,9 @@ $web17_com_au$.logger = function() {
 
   } // LogFrame
 
+  // module.Log
+  // - represents an instance of a log
+  // - is essentially an html table that stores log entries in rows
 
   module.Log = function(name) {
 

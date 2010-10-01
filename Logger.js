@@ -69,9 +69,12 @@ $web17_com_au$.logger = function() {
     var body = document.createDocumentFragment();
     var logs = {};
       // The logs that this log frame handles
+
     me.logger = null;
+      // The current Log instance that we are displaying.
 
     var n=0,id;
+
     // logFrame: the div containing logger.
     // logHeader: title bar at the top.
     // logMenu: menu bar near top
@@ -87,7 +90,7 @@ $web17_com_au$.logger = function() {
     var zindex=1000;
     var agt=navigator.userAgent.toLowerCase();
     var storedPosition; // Place to store position.
-    var minimizeButton;
+    var buttons = {};   // Stores buttons on logger menu (usually span nodes)
     var minimized=false; // Put us in unminimized mode.
     var wrapped=false;   // Put us in wrapped mode.
     var expandedWidth=false;  // Width is not expanded to fit screen.
@@ -127,6 +130,18 @@ $web17_com_au$.logger = function() {
         }
         id = window.setInterval(check_body,interval);
     }
+
+      // Make a button
+
+      var makeButton = function(label,f,menuNode,options) {
+          var node = document.createElement('SPAN');
+          node.appendChild( document.createTextNode(' '+label+' ') );
+          node.style.marginRight='0.2em';
+          makeUnselectable(node);
+          menuNode.appendChild(node);
+          module.addEvent(node,'click',f);
+          return node;
+      }
 
     // init()
     // Called at the end - see below.
@@ -219,25 +234,15 @@ $web17_com_au$.logger = function() {
         //me.log('Using absolute positioning.');
       }
 
-      var buttons = {};
-      var makeButton = function(label,f,options) {
-          var node = document.createElement('SPAN');
-          node.appendChild( document.createTextNode(' '+label+' ') );
-          node.style.marginRight='0.2em';
-          makeUnselectable(node);
-          logMenu.appendChild(node);
-          module.addEvent(node,'click',f);
-          return node;
-      }
 
-      minimizeButton = makeButton('minimize',me.minimize);
-      makeButton('wrap',me.wrap);
-      makeButton('100%',me.expandWidth);
-      makeButton('<',me.increaseWidth);
-      makeButton('>',me.decreaseWidth);
-      makeButton('\\/',me.increaseHeight);
-      makeButton('/\\',me.decreaseHeight);
-      makeButton('snap',me.snap);
+      buttons.minimize = makeButton('minimize',me.minimize,logMenu);
+      makeButton('wrap',me.wrap,logMenu);
+      makeButton('100%',me.expandWidth,logMenu);
+      makeButton('<',me.increaseWidth,logMenu);
+      makeButton('>',me.decreaseWidth,logMenu);
+      makeButton('\\/',me.increaseHeight,logMenu);
+      makeButton('/\\',me.decreaseHeight,logMenu);
+      makeButton('snap',me.snap,logMenu);
 
 
       // Make logHeader a drag handle for dragging
@@ -332,12 +337,12 @@ $web17_com_au$.logger = function() {
     me.minimize = function() {
       if(minimized) {
         minimized=false;
-        minimizeButton.innerHTML = ' minimize ';
+        buttons.minimize.innerHTML = ' minimize ';
         logBody.style.display="";
       }
       else {
         logBody.style.display="none";
-        minimizeButton.innerHTML = ' maximize ';
+        buttons.minimize.innerHTML = ' maximize ';
         minimized=true;
       }
     }

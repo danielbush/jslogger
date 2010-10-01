@@ -81,13 +81,13 @@
                   onclick="logger.log('This is a log entry.');"
                   value="Create log entry" /><br/>
            <input type="button" 
-                  onclick="logger.pp([1,2,3]);"
+                  onclick="logger.log([[1,2,3]]);"
                   value="pp array" /><br/>
            <input type="button" 
-                  onclick="logger.pp({a:1,b:2,c:'foo',});"
+                  onclick="logger.log([{a:1,b:2,c:'foo',}]);"
                   value="pp obj" /><br/>
            <input type="button" 
-                  onclick="logger.pp(function(){var a='a';});"
+                  onclick="logger.log([function(){var a='a';}]);"
                   value="pp func" /><br/>
 </body>
 </html>

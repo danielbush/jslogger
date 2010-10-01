@@ -14,7 +14,7 @@
 -->
 
 <head>
-        <title>Logger usage - simple example</title>
+        <title>Logger usage - deferred example</title>
         <meta http-equiv="content-type" 
               content="text/html;charset=utf-8" />
         <meta http-equiv="Content-Style-Type"
@@ -22,21 +22,45 @@
         <link href="" rel="stylesheet" 
               type="text/css"
               media="screen" /> 
+        <script type="text/javascript" src="pretty_print.js" ></script>
         <script type="text/javascript" src="Logger.js" ></script>
         <script type="text/javascript" >
 
           var Logger = $web17_com_au$.logger.Logger; 
-          var logger;
+          logger=new Logger('Logger example1',
+                            {minimized:false,
+                             width:'500px',
+                             height:'300px',
+                             wrap:true});
 
+          logger.log('howdy!');
+          logger.log('oh dear, document.body is '+document.body);
+
+          logger.divider();
+          logger.log('next entries show use of [] to pretty print objects');
+          logger.log([1,2,3],{a:1,b:2});
+          logger.log([[1,2,3]],[{a:1,b:2}]);
+
+          logger.divider();
+          logger.log('this array is ',[[1,2,3]],'!');
+          logger.log('this obj is ',[{a:'foo',b:2}],'!');
+          logger.log('these objects are ',[[1,2,'bar'],{a:'foo',b:2}],'!');
+
+          logger.divider();
+          logger.alert("error! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.red("fail! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.green("phew! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.blue("relax! ",[[1,2,'bar'],{a:'foo',b:2}]);
+          logger.yellow("happy! ",[[1,2,'bar'],{a:'foo',b:2}]);
+
+          logger.divider();
+          logger.makeLogFunction(
+              'foo',
+              {backgroundColor:'blue',color:'white',fontWeight:'bold'});
+          logger.foo('new logging function! ',[[1,'foo',4]])
+              
           function init() {
-            logger=new Logger('Logger example1',{minimized:false});
-            //logger.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-            logger.log('this is a very long sentence composed of average sized words because im interested to see how it looks in logger when I view it');
-            logger.log('window.innerHeight: '+window.innerHeight);
-            logger.log('document.body.clientHeight: '+document.body.clientHeight);
-            logger.log('document.body.offsetHeight: '+document.body.offsetHeight);
-            logger.log('document.documentElement.offsetHeight: '+document.documentElement.offsetHeight);
-            logger.log('document.documentElement.clientHeight: '+document.documentElement.clientHeight);
+              logger.log('document.body is now '+document.body);
           }
         </script>
 
@@ -50,9 +74,20 @@
 </head>
 
 <body onload="init();" >
-  <h1>Logger usage - simple example</h1>
-  <input type="button" 
-         onclick="logger.log('This is a log entry.');"
-         value="Create log entry" />
+        <h1>Logger usage - deferred example</h1>
+        <p>This example shows that we can start using logger
+           before the html document has loaded.</p>
+           <input type="button" 
+                  onclick="logger.log('This is a log entry.');"
+                  value="Create log entry" /><br/>
+           <input type="button" 
+                  onclick="logger.pp([1,2,3]);"
+                  value="pp array" /><br/>
+           <input type="button" 
+                  onclick="logger.pp({a:1,b:2,c:'foo',});"
+                  value="pp obj" /><br/>
+           <input type="button" 
+                  onclick="logger.pp(function(){var a='a';});"
+                  value="pp func" /><br/>
 </body>
 </html>

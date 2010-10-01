@@ -7,10 +7,12 @@ libraries for its functionality.
 
 ## Usage
 
-See `example.html` and `example-deferred.html` for examples.
+See `example.html` for examples.
 
-"deferred" refers to the fact that you can instantiate the logger and
-start logging before document.body is available.
+### No waiting
+
+You can instantiate the logger and
+start logging before `document.body` is available.
 
 Set up script tags:
       <script type="text/javascript" src="path/to/pretty_print.js" ></script>
@@ -19,6 +21,10 @@ Then:
       var Logger = $web17_com_au$.logger.Logger;
       var logger;
       logger = new Logger('some log');
+
+When you create a logger, it will use `position:fixed` and
+sit at `right:0px;top:0px`, ie the top right corner.
+
 Configure appearance of the logger:
       logger = new Logger('some log',
         {width:'400px',height:'92%',minimize:true,wrap:true}
@@ -56,7 +62,7 @@ One way to selectively log execution is to use labels.
       logger.A = true;
       doSomethingComplicated();
       logger.A = false;
-In doSomethingComplicated and functions it calls:
+In `doSomethingComplicated` and functions it calls:
       logger.A && logger.log('log something');
 
 This can be useful when are logging execution on something
@@ -75,5 +81,4 @@ dlb.id.au (AT) gmail.com
 --
 Daniel Bush
 
-Mon Sep 27 12:47:13 EST 2010
-
+Fri Oct  1 12:07:26 EST 2010

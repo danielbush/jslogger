@@ -14,7 +14,7 @@ EXT_DIR="js-logger"
   # - version_string is set via the build script.
 EXT_MAIN="logger"
   # => build/EXT_DIR-<version-string>/EXT_MAIN.js
-FILE_ORDER="Logger.js"
+FILE_ORDER="pretty_print.js Logger.js"
   # List of js files to minifier and squash into a file.
   # eg "file1 file2 file3"
 OTHER_FILES=

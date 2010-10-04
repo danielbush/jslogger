@@ -202,8 +202,7 @@ $web17_com_au$.logger = function() {
       setProperty(logFrame.style,{
           width:width,
           height:height,
-          zIndex:zindex,
-          backgroundColor:'white'
+          zIndex:zindex
       });
 
       setProperty(logBody.style,{
@@ -323,6 +322,7 @@ $web17_com_au$.logger = function() {
                     if(me.logs[i].button) {
                         me.logs[i].button.style.backgroundColor='#ccc';
                         me.logs[i].button.style.color='black';
+
                     }
                 } else {
                     if(me.logs[i].button) {

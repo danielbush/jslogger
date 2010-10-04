@@ -3,16 +3,19 @@ DB - Daniel Bush
 v1.0 [not released]
 Aim: tested in all major relevant desktop browsers.
 
-v0.4 [not released]
-Aims: 
+v0.4.x 
   1) Logger becomes a frame holding multiple log sessions.
      Logs can be accessed on the log header.
      Creating a new log now requires:
-       var LogHolder = new Logger();
-       var myLog = LogHolder.createLog(logName);
+       var frame = new Logger();
+       var myLog = frame.add(logName);
+     DONE Oct-2010
   2) Log entries can be sorted both normal and reverse
      order; default is reverse order (last entry at the
      top).
+     NOT DONE
+  3) pretty print
+     DONE Oct-2010
 
 v0.3.1
 * Added build file. [DB]

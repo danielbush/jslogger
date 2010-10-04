@@ -189,7 +189,7 @@ try{
     module.pp.nested_property_limit = 10;
 
     // Print nested items on new line (for javascript objects).
-    module.pp.extended = true; // TODO
+    module.pp.extended = true;
 
     return module;
 

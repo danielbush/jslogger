@@ -95,9 +95,16 @@ $web17_com_au$.pretty_print = function() {
             } else {
                 // JAVASCRIPT OBJECT
                 // Print as object literal
+                var count=0;
                 str += '{';
                 if(module.pp.extended) str += NEWLINE;
+try{
                 for(var n in obj) {
+                    if(count++>module.pp.nested_property_limit && nested>0) {
+                        str+=(indent+'...');
+                        if(module.pp.extended) str += NEWLINE;
+                        break;
+                    }
                     if(obj!==obj[n]) {
                         // To prevent infinite recursion.
                         // !== is important; e4x Namespace and its uri
@@ -112,6 +119,7 @@ $web17_com_au$.pretty_print = function() {
                         if(module.pp.extended) str += NEWLINE;
                     }
                 }
+} catch (e) { str+='[error:'+n+']' }
                 str += indent2+'}';
                 if(module.pp.extended) str += NEWLINE;
             }
@@ -174,8 +182,14 @@ $web17_com_au$.pretty_print = function() {
     module.pp.nested = 2;
     // Truncate large xml, strings or function definitions
     module.pp.truncate = true;
+
+    // Some objects or their properties have large numbers of properties;
+    // limit the number printed.
+    // For example, try pretty-printing and event object in firefox.
+    module.pp.nested_property_limit = 10;
+
     // Print nested items on new line (for javascript objects).
-    module.pp.extended = false; // TODO
+    module.pp.extended = true; // TODO
 
     return module;
 

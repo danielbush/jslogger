@@ -516,7 +516,8 @@ $web17_com_au$.logger = function() {
           var td0 = document.createElement("td");
           var td = document.createElement("td");
           td0.appendChild(document.createTextNode(logCount+': '));
-          setProperty(td0.style,{width:'1%',color:'red'});
+          setProperty(td0.style,{width:'1%',color:'red',verticalAlign:'top'});
+          setProperty(td.style,{cursor:'pointer'});
           setProperty(td.style,styles);
           td.appendChild(node);
           tr.appendChild(td0);
@@ -534,12 +535,14 @@ $web17_com_au$.logger = function() {
 
       var parseLogArgs = function() {
           var msg='';
+          var p;
           for(var i=0;i<arguments.length;i++) {
               if(arguments[i] instanceof Array) {
                   if(pp) {
                       for(var j=0;j<arguments[i].length;j++) {
                           if(j!=0) msg+=',';
-                          msg+=pp(arguments[i][j]);
+                          p = pp(arguments[i][j]);
+                          msg+=(p);
                       }
                   } else msg+=arguments[i];
               } else msg+=arguments[i];
@@ -548,14 +551,39 @@ $web17_com_au$.logger = function() {
       }
 
       // Generates a function that logs.
+      //
+      // - We stash the original text of the entry in span._text
+      //   and create a text node for it.
+      // - IE6 will remove extra whitespace characters like '\n'
+      //   when using innerHTML (except perhaps in a pre-tag);
+      //   other browsers tend to retain these characters but
+      //   just not show them
+      // - also it's safer to use the dom to clear out a node
+      //   rather than use innerHTML=''; ie6 can crash
+      // - we have to work around this fact
 
       me.makeLogFunction = function(name,options) {
           return me[name] = function() {
               var span = document.createElement('SPAN');
-              span.appendChild(document.createTextNode(
-                  parseLogArgs.apply(me,arguments)
-              ));
+              span._text = parseLogArgs.apply(me,arguments);
+              span._tnode = document.createTextNode(span._text);
+              span.innerHTML = span._text;
               makeLogEntry(span,options);
+              span.onclick = function() {
+                  var pre;
+                  if(span._pre) {
+                      span._pre=false;
+                      while(span.firstChild)
+                          span.removeChild(span.firstChild);
+                      span.innerHTML = span._text;
+                  } else {
+                      span._pre=true;
+                      while(span.firstChild)
+                          span.removeChild(span.firstChild);
+                      span.appendChild(document.createElement('PRE'));
+                      span.firstChild.appendChild(span._tnode);
+                  }
+              }
           };
       }
 

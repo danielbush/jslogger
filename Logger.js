@@ -157,7 +157,6 @@ $web17_com_au$.logger = function() {
           color:'black', right:'0px', top:'0px',
           visibility:'visible',
           position:'absolute',
-          backgroundColor:'white'
       });
 
       logFrame.setAttribute("id",ID);
@@ -203,14 +202,16 @@ $web17_com_au$.logger = function() {
       setProperty(logFrame.style,{
           width:width,
           height:height,
-          zIndex:zindex
+          zIndex:zindex,
+          backgroundColor:'white'
       });
 
       setProperty(logBody.style,{
           border:'solid black 1px',
           width:width,
           overflow:'scroll',
-          height:'100%'
+          height:'100%',
+          backgroundColor:'white'
       });
 
       // Assemble Logger's html...

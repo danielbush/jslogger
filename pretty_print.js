@@ -82,13 +82,15 @@ $web17_com_au$.pretty_print = function() {
                 if(module.pp.extended) str += NEWLINE;
 
             } else if(!(obj instanceof Object)) {
-                // JAVA CLASS/OBJECT (probably)
+                // JAVA CLASS/OBJECT (rhino)
+                if(java && java.lang) {
 
-                // Suppose someone types: someObj['class'].
-                // They want the java class of someObj but we'll
-                // be giving them the class of this java class (which is Class).
-                if(obj['class']===java.lang.Class){str=obj;}
-                else str = obj['class']; //str = obj; // Alternative
+                    // Suppose someone types: someObj['class'].
+                    // They want the java class of someObj but we'll
+                    // be giving them the class of this java class (which is Class).
+                    if(obj['class']===java.lang.Class){str=obj;}
+                    else str = obj['class']; //str = obj; // Alternative
+                }
 
             } else {
                 // JAVASCRIPT OBJECT

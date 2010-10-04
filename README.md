@@ -66,6 +66,14 @@ Put your variables in an array and logger will pretty print them:
       logger.log('a is ',[a],' and b is ',[b]);
       logger.log('a,b are ',[a,b]);
 
+### Extended pretty printing
+
+In extended pretty printing, newlines and indenting will be respected.
+This can make reading large objects easier.
+Extended pretty printing can be toggled by clicking on the log entry.
+The pretty printing function (`pp`) in the `pretty_print` module needs
+to have `pp.extended` set to `true` which it is by default.
+
 ### Highlight entries:
 
       logger.alert('error!');  // white text on red

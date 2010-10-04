@@ -156,7 +156,7 @@ $web17_com_au$.logger = function() {
       setProperty(logFrame.style,{
           color:'black', right:'0px', top:'0px',
           visibility:'visible',
-          position:'absolute',
+          position:'absolute'
       });
 
       logFrame.setAttribute("id",ID);
